@@ -33,13 +33,27 @@ export class AppComponent implements AfterViewInit {
     this.canvas.addEventListener('mousedown', this.startDrawing.bind(this))
     this.canvas.addEventListener('mousemove', this.draw.bind(this))
     this.canvas.addEventListener('mouseup', this.endDrawing.bind(this))
-    this.canvas.addEventListener('mouseleave', this.endDrawing.bind(this))
   }
 
   private startDrawing (event: MouseEvent): void {
     this.isDrawing = true
     const [x, y] = d3.pointer(event, this.canvas)
     this.currentLine = { start: [x, y], end: [x, y] }
+    document.addEventListener('keydown', this.undoLine.bind(this))
+    this.canvas.addEventListener('mousedown', this.undoLine.bind(this))
+  }
+
+  private undoLine (event: MouseEvent | KeyboardEvent): void {
+    if (
+      this.isDrawing &&
+      (event instanceof KeyboardEvent
+        ? event.key === 'Backspace' || event.key === 'Delete'
+        : event.button === 2)
+    ) {
+      this.isDrawing = false
+      this.currentLine = { start: [0, 0], end: [0, 0] }
+      this.updateCanvas()
+    }
   }
 
   private draw (event: MouseEvent): void {
@@ -53,7 +67,9 @@ export class AppComponent implements AfterViewInit {
 
   private endDrawing (): void {
     this.isDrawing = false
-    this.lines.push(this.currentLine)
+    if (this.currentLine.start[0] !== 0) {
+      this.lines.push(this.currentLine)
+    }
   }
 
   private updateCanvas (): void {
