@@ -1,10 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { SegmentatorComponent } from './views/segmentator/segmentator.component'
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'segmentator',
+    component: SegmentatorComponent
+  }
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SegmentatorRoutingModule { }
+export class SegmentatorRoutingModule {}
