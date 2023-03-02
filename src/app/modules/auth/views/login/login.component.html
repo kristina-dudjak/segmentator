@@ -1,1 +1,39 @@
-<p>login works!</p>
+<article class="login">
+  <form class="login__form" [formGroup]="loginForm">
+    <h2 class="login__form__title">Log in</h2>
+    <mat-icon class="login__form__google" svgIcon="google"></mat-icon>
+    <mat-divider class="login__form__divider"></mat-divider>
+    <mat-form-field class="login__form__field" appearance="outline">
+      <mat-label class="login__form__field__label">Email</mat-label>
+      <input
+        class="login__form__field__input"
+        matInput
+        required
+        placeholder="example@gmail.com"
+        type="email"
+        autocomplete="on"
+        formControlName="email"
+      />
+    </mat-form-field>
+    <mat-form-field class="login__form__field" appearance="outline">
+      <mat-label class="login__form__field__label">Password</mat-label>
+      <input
+        class="login__form__field__input"
+        matInput
+        required
+        autocomplete="on"
+        formControlName="password"
+        name="password"
+      />
+    </mat-form-field>
+    <button class="login__form__submit" mat-raised-button color="accent">
+      Log in
+    </button>
+  </form>
+  <aside class="login__redirect">
+    <h2 class="login__redirect__title">New here?</h2>
+    <button class="login__redirect__action" mat-raised-button color="accent">
+      Sign up
+    </button>
+  </aside>
+</article>
