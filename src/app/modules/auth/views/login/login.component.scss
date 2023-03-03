@@ -10,9 +10,13 @@
 
   &__form {
     grid-column: 3 / 7;
+    animation: loadUp 1s;
     display: grid;
     justify-items: center;
-    animation: loadUp 1s;
+
+    &__google {
+      width: 80%;
+    }
 
     &__divider {
       height: 4px;
@@ -22,8 +26,14 @@
 
     &__field {
       width: 80%;
+
       &__label {
         color: mat.get-color-from-palette($accent, 500);
+      }
+
+      &__wrapper {
+        display: flex;
+        align-items: center;
       }
     }
   }
