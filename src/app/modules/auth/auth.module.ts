@@ -5,10 +5,11 @@ import { AuthRoutingModule } from './auth-routing.module'
 import { LoginComponent } from './views/login/login.component'
 import { RegisterComponent } from './views/register/register.component'
 
-import { SharedModule } from 'src/app/shared/shared.module'
+import { SharedModule } from 'src/app/shared/shared.module';
+import { TogglePasswordDirective } from './directives/toggle-password.directive'
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, TogglePasswordDirective],
   imports: [CommonModule, AuthRoutingModule, SharedModule]
 })
 export class AuthModule {}

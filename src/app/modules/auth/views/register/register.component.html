@@ -1,1 +1,70 @@
-<p>register works!</p>
+<article class="register">
+  <form class="register__form" [formGroup]="registerForm">
+    <h2 class="register__form__title">Sign in</h2>
+    <button class="register__form__google" mat-icon-button>
+      <mat-icon
+        class="register__form__google__icon"
+        svgIcon="google"
+      ></mat-icon>
+    </button>
+    <mat-divider class="register__form__divider"></mat-divider>
+    <mat-form-field class="register__form__field" appearance="outline">
+      <mat-label class="register__form__field__label">Email</mat-label>
+      <input
+        class="register__form__field__input"
+        matInput
+        required
+        placeholder="example@gmail.com"
+        type="email"
+        autocomplete="on"
+        formControlName="email"
+      />
+    </mat-form-field>
+    <mat-form-field class="register__form__field" appearance="outline">
+      <mat-label class="register__form__field__label">Password</mat-label>
+      <div class="register__form__field__wrapper">
+        <input
+          class="register__form__field__wrapper__input"
+          matInput
+          required
+          autocomplete="on"
+          formControlName="password"
+          name="password"
+          [type]="'password'"
+          appTogglePassword
+        />
+      </div>
+    </mat-form-field>
+    <mat-form-field class="register__form__field" appearance="outline">
+      <mat-label class="register__form__field__label"
+        >Repeat password</mat-label
+      >
+      <div class="register__form__field__wrapper">
+        <input
+          class="register__form__field__wrapper__input"
+          matInput
+          required
+          autocomplete="on"
+          formControlName="repeatPassword"
+          name="repeatPassword"
+          [type]="'password'"
+          appTogglePassword
+        />
+      </div>
+    </mat-form-field>
+    <button class="register__form__submit" mat-raised-button color="accent">
+      Sign in
+    </button>
+  </form>
+  <aside class="register__redirect">
+    <h2 class="register__redirect__title">Already have an account?</h2>
+    <button
+      class="register__redirect__action"
+      routerLink="/login"
+      mat-raised-button
+      color="accent"
+    >
+      Log in
+    </button>
+  </aside>
+</article>
