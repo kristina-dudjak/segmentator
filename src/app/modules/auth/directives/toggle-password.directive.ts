@@ -26,8 +26,6 @@ export class TogglePasswordDirective {
       this.vcRef.createComponent(MatButton).instance._elementRef.nativeElement
     const matIcon =
       this.vcRef.createComponent(MatIcon).instance._elementRef.nativeElement
-    this.renderer.addClass(matButton, 'toggle-button')
-    this.renderer.addClass(matButton, 'button-height')
     this.renderer.setStyle(matButton, 'line-height', '0')
     matIcon.innerHTML = 'visibility_off'
 
@@ -35,7 +33,6 @@ export class TogglePasswordDirective {
     matButton.addEventListener('click', () => {
       this.toggle(matIcon)
     })
-    this.renderer.addClass(matIcon, 'toggle-icon')
     parent.appendChild(matButton)
   }
 
