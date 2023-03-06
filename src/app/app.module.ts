@@ -12,6 +12,9 @@ import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { authReducer } from './shared/store/auth/auth.reducer'
+import { AuthEffects } from './shared/store/auth/auth.effects'
+import { FIREBASE_OPTIONS } from '@angular/fire/compat'
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,15 +25,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([]),
+    StoreModule.forRoot({ auth: authReducer }),
+    EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
     }),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

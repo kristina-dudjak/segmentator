@@ -52,7 +52,12 @@
         />
       </div>
     </mat-form-field>
-    <button class="register__form__submit" mat-raised-button color="accent">
+    <button
+      class="register__form__submit"
+      mat-raised-button
+      color="accent"
+      (click)="onSubmit()"
+    >
       Sign in
     </button>
   </form>
