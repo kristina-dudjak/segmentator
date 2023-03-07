@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
-import { registerRequest } from 'src/app/shared/store/auth/auth.actions'
-import { AuthState } from 'src/app/shared/store/auth/auth.reducer'
+import { registerRequest } from 'src/app/modules/auth/store/auth.actions'
+import { AuthState } from '../../store/auth.state'
 
 @Component({
   selector: 'app-register',

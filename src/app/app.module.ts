@@ -12,8 +12,6 @@ import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { authReducer } from './shared/store/auth/auth.reducer'
-import { AuthEffects } from './shared/store/auth/auth.effects'
 import { FIREBASE_OPTIONS } from '@angular/fire/compat'
 
 @NgModule({
@@ -25,8 +23,8 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat'
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    StoreModule.forRoot({ auth: authReducer }),
-    EffectsModule.forRoot([AuthEffects]),
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
