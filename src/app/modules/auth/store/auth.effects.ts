@@ -1,28 +1,37 @@
 import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { mergeMap } from 'rxjs'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import {
+  loginFailure,
+  loginRequest,
+  loginSuccess,
   registerFailure,
   registerRequest,
-  registerSuccess
+  registerSuccess,
+  signOutFailure,
+  signOutRequest,
+  signOutSuccess
 } from './auth.actions'
 
 @Injectable()
 export class AuthEffects {
-  constructor (private authService: AuthService, private actions$: Actions) {}
+  constructor (
+    private authService: AuthService,
+    private actions$: Actions,
+    private router: Router
+  ) {}
 
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(registerRequest),
-      mergeMap(async action => {
+      mergeMap(async ({ credentials: { email, password } }) => {
         return await this.authService
-          .register(
-            action.data.credentials.email,
-            action.data.credentials.password
-          )
+          .register(email, password)
           .then(user => {
-            return registerSuccess({ data: user })
+            this.router.navigateByUrl('/segmentator')
+            return registerSuccess({ user: user })
           })
           .catch(error => {
             return registerFailure(error)
@@ -30,4 +39,38 @@ export class AuthEffects {
       })
     )
   )
+
+  login$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loginRequest),
+      mergeMap(async ({ credentials: { email, password } }) => {
+        return await this.authService
+          .logIn(email, password)
+          .then(user => {
+            this.router.navigateByUrl('/segmentator')
+            return loginSuccess({ user: user })
+          })
+          .catch(error => {
+            return loginFailure(error)
+          })
+      })
+    )
+  )
+
+  public signout$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(signOutRequest),
+      mergeMap(async () => {
+        return this.authService
+          .signOut()
+          .then(() => {
+            this.router.navigateByUrl('/login')
+            return signOutSuccess()
+          })
+          .catch(e => {
+            return signOutFailure({ error: e })
+          })
+      })
+    )
+  })
 }

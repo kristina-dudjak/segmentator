@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core'
+import { Store } from '@ngrx/store'
 import * as d3 from 'd3'
+import { signOutRequest } from 'src/app/modules/auth/store/auth.actions'
+import { AuthState } from 'src/app/modules/auth/store/auth.state'
 
 @Component({
   selector: 'app-segmentator',
@@ -15,7 +18,11 @@ export class SegmentatorComponent implements AfterViewInit {
   private currentLine: any
   private isImageLoaded = false
 
-  constructor () {}
+  constructor (private store: Store<AuthState>) {}
+
+  logout () {
+    this.store.dispatch(signOutRequest())
+  }
 
   ngAfterViewInit (): void {
     this.canvas = this.canvasRef.nativeElement

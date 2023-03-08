@@ -15,7 +15,7 @@ import { initialState } from './auth.state'
 export const authReducer = createReducer(
   initialState,
   on(registerRequest, state => ({ ...state, loading: true })),
-  on(registerSuccess, (state, { data: { user } }) => ({
+  on(registerSuccess, (state, { user }) => ({
     ...state,
     loading: false,
     user: user
@@ -29,7 +29,7 @@ export const authReducer = createReducer(
     ...state,
     loading: true
   })),
-  on(loginSuccess, (state, { data: { user } }) => ({
+  on(loginSuccess, (state, { user }) => ({
     ...state,
     loading: false,
     user: user

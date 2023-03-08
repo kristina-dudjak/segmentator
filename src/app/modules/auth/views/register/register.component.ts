@@ -21,11 +21,9 @@ export class RegisterComponent {
   onSubmit () {
     this.store.dispatch(
       registerRequest({
-        data: {
-          credentials: {
-            email: this.registerForm.value.email as string,
-            password: this.registerForm.value.password as string
-          }
+        credentials: {
+          email: this.registerForm.value.email as string,
+          password: this.registerForm.value.password as string
         }
       })
     )

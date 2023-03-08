@@ -4,7 +4,7 @@ import { SegmentatorComponent } from './views/segmentator/segmentator.component'
 
 const routes: Routes = [
   {
-    path: 'segmentator',
+    path: '',
     component: SegmentatorComponent
   }
 ]

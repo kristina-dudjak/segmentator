@@ -32,7 +32,12 @@
         />
       </div>
     </mat-form-field>
-    <button class="login__form__submit" mat-raised-button color="accent">
+    <button
+      class="login__form__submit"
+      mat-raised-button
+      color="accent"
+      (click)="onSubmit()"
+    >
       Log in
     </button>
   </form>
