@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
+import * as firebase from 'firebase/compat/app'
 @Injectable({
   providedIn: 'root'
 })
@@ -16,9 +17,12 @@ export class AuthService {
     return (await this.fbAuth.getRedirectResult()).user
   }
 
-  // googleLogIn () {
-  //   this.fbAuth.signInWithPopup(new firebase.default.auth.GoogleAuthProvider())
-  // }
+  async googleLogIn () {
+    await this.fbAuth.signInWithPopup(
+      new firebase.default.auth.GoogleAuthProvider()
+    )
+    return (await this.fbAuth.getRedirectResult()).user
+  }
 
   async signOut () {
     await this.fbAuth.signOut()

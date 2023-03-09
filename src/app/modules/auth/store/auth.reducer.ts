@@ -1,5 +1,8 @@
 import { createReducer, on } from '@ngrx/store'
 import {
+  googleLoginFailure,
+  googleLoginRequest,
+  googleLoginSuccess,
   loginFailure,
   loginRequest,
   loginSuccess,
@@ -35,6 +38,20 @@ export const authReducer = createReducer(
     user: user
   })),
   on(loginFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error: error
+  })),
+  on(googleLoginRequest, state => ({
+    ...state,
+    loading: true
+  })),
+  on(googleLoginSuccess, (state, { user }) => ({
+    ...state,
+    loading: false,
+    user: user
+  })),
+  on(googleLoginFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error: error

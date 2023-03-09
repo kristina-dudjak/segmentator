@@ -22,6 +22,22 @@ export const loginFailure = createAction(
   props<{ error: string }>()
 )
 
+export const googleLoginRequest = createAction(
+  `[${authFeatureKey}] Google Login Request`
+)
+
+export const googleLoginSuccess = createAction(
+  `[${authFeatureKey}] Google Login Success`,
+  props<{
+    user: User
+  }>()
+)
+
+export const googleLoginFailure = createAction(
+  `[${authFeatureKey}] Google Login Failure`,
+  props<{ error: string }>()
+)
+
 export const registerRequest = createAction(
   `[${authFeatureKey}] Register Request`,
   props<{

@@ -1,7 +1,7 @@
 <article class="login">
   <form class="login__form" [formGroup]="loginForm">
     <h2 class="login__form__title">Log in</h2>
-    <button class="login__form__google" mat-icon-button>
+    <button class="login__form__google" mat-icon-button (click)="onGoogle()">
       <mat-icon class="login__form__google__icon" svgIcon="google"></mat-icon>
     </button>
     <mat-divider class="login__form__divider"></mat-divider>

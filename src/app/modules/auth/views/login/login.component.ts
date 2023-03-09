@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
-import { loginRequest } from '../../store/auth.actions'
+import { googleLoginRequest, loginRequest } from '../../store/auth.actions'
 import { AuthState } from '../../store/auth.state'
 
 @Component({
@@ -26,5 +26,9 @@ export class LoginComponent {
         }
       })
     )
+  }
+
+  onGoogle () {
+    this.store.dispatch(googleLoginRequest())
   }
 }

@@ -1,7 +1,7 @@
 <article class="register">
   <form class="register__form" [formGroup]="registerForm">
     <h2 class="register__form__title">Sign in</h2>
-    <button class="register__form__google" mat-icon-button>
+    <button class="register__form__google" mat-icon-button (click)="onGoogle()">
       <mat-icon
         class="register__form__google__icon"
         svgIcon="google"

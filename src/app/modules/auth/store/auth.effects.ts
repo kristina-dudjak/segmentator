@@ -4,6 +4,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { mergeMap } from 'rxjs'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import {
+  googleLoginFailure,
+  googleLoginRequest,
+  googleLoginSuccess,
   loginFailure,
   loginRequest,
   loginSuccess,
@@ -73,4 +76,21 @@ export class AuthEffects {
       })
     )
   })
+
+  googleLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(googleLoginRequest),
+      mergeMap(async () => {
+        return await this.authService
+          .googleLogIn()
+          .then(user => {
+            this.router.navigateByUrl('/segmentator')
+            return googleLoginSuccess({ user: user })
+          })
+          .catch(error => {
+            return googleLoginFailure(error)
+          })
+      })
+    )
+  )
 }
