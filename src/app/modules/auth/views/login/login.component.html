@@ -16,6 +16,9 @@
         autocomplete="on"
         formControlName="email"
       />
+      <mat-error class="login__form__field__error">{{
+        loginForm.getError('email')
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="login__form__field" appearance="outline">
       <mat-label class="login__form__field__label">Password</mat-label>
@@ -31,6 +34,9 @@
           appTogglePassword
         />
       </div>
+      <mat-error class="login__form__field__error">{{
+        loginForm.getError('password')
+      }}</mat-error>
     </mat-form-field>
     <button
       class="login__form__submit"

@@ -5,6 +5,8 @@ import {
   googleLoginRequest,
   registerRequest
 } from 'src/app/modules/auth/store/auth.actions'
+import { PasswordRegex } from '../../const/PasswordRegex'
+import { ValidatorService } from '../../services/validator.service'
 import { AuthState } from '../../store/auth.state'
 
 @Component({
@@ -15,11 +17,36 @@ import { AuthState } from '../../store/auth.state'
 export class RegisterComponent {
   constructor (private fb: FormBuilder, private store: Store<AuthState>) {}
 
-  registerForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
-    repeatPassword: ['', Validators.required]
-  })
+  registerForm = this.fb.group(
+    {
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(PasswordRegex)
+        ]
+      ],
+      repeatPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(PasswordRegex)
+        ]
+      ]
+    },
+    {
+      validators: [
+        ValidatorService.validator('email'),
+        ValidatorService.validator('password'),
+        ValidatorService.validator('repeatPassword'),
+        ValidatorService.passwordMatchValidator('repeatPassword')
+      ],
+      updateOn: 'change'
+    }
+  )
 
   onSubmit () {
     this.store.dispatch(

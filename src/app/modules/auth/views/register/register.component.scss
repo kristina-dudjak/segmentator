@@ -36,6 +36,10 @@
         align-items: center;
         margin-top: -0.5em;
       }
+
+      &__error {
+        color: mat.get-color-from-palette($error, normal);
+      }
     }
   }
 

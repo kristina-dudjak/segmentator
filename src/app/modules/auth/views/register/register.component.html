@@ -19,6 +19,11 @@
         autocomplete="on"
         formControlName="email"
       />
+      <mat-error
+        class="register__form__field__error"
+        *ngIf="registerForm.hasError('email')"
+        >{{ registerForm.getError('email') }}</mat-error
+      >
     </mat-form-field>
     <mat-form-field class="register__form__field" appearance="outline">
       <mat-label class="register__form__field__label">Password</mat-label>
@@ -34,6 +39,11 @@
           appTogglePassword
         />
       </div>
+      <mat-error
+        class="register__form__field__error"
+        *ngIf="registerForm.hasError('password')"
+        >{{ registerForm.getError('password') }}</mat-error
+      >
     </mat-form-field>
     <mat-form-field class="register__form__field" appearance="outline">
       <mat-label class="register__form__field__label"
@@ -51,6 +61,11 @@
           appTogglePassword
         />
       </div>
+      <mat-error
+        class="register__form__field__error"
+        *ngIf="registerForm.hasError('repeatPassword')"
+        >{{ registerForm.getError('repeatPassword') }}</mat-error
+      >
     </mat-form-field>
     <button
       class="register__form__submit"
