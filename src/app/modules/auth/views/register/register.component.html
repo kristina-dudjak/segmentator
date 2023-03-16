@@ -71,6 +71,7 @@
       class="register__form__submit"
       mat-raised-button
       color="accent"
+      [disabled]="!registerForm.valid"
       (click)="onSubmit()"
     >
       Sign in

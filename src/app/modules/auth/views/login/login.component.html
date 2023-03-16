@@ -42,6 +42,7 @@
       class="login__form__submit"
       mat-raised-button
       color="accent"
+      [disabled]="!loginForm.valid"
       (click)="onSubmit()"
     >
       Log in
