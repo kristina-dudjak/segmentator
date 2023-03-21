@@ -41,6 +41,10 @@
         color: mat.get-color-from-palette($error, normal);
       }
     }
+
+    &__submit {
+      background-color: mat.get-color-from-palette($accent, 500);
+    }
   }
 
   &__redirect {
@@ -52,6 +56,10 @@
     justify-content: center;
     background-color: mat.get-color-from-palette($accent, 500);
     animation: loadDown 1s;
+
+    &__action {
+      background-color: mat.get-color-from-palette($accent, 500);
+    }
   }
 }
 
