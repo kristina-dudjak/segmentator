@@ -36,11 +36,12 @@ export class LoginComponent {
   )
 
   onSubmit () {
+    const { email, password } = this.loginForm.value
     this.store.dispatch(
       loginRequest({
         credentials: {
-          email: this.loginForm.value.email as string,
-          password: this.loginForm.value.password as string
+          email,
+          password
         }
       })
     )

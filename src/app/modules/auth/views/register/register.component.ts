@@ -49,11 +49,12 @@ export class RegisterComponent {
   )
 
   onSubmit () {
+    const { email, password } = this.registerForm.value
     this.store.dispatch(
       registerRequest({
         credentials: {
-          email: this.registerForm.value.email as string,
-          password: this.registerForm.value.password as string
+          email,
+          password
         }
       })
     )
