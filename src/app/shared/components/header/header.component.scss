@@ -1,0 +1,12 @@
+@use '@angular/material' as mat;
+@import '../../scss/colors.scss';
+
+.header {
+  background-color: mat.get-color-from-palette($accent, 500);
+  display: flex;
+  justify-content: flex-end;
+
+  &__exit {
+    margin: 20px;
+  }
+}

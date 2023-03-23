@@ -13,11 +13,12 @@ import { EffectsModule } from '@ngrx/effects'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FIREBASE_OPTIONS } from '@angular/fire/compat'
-
+import { SharedModule } from './shared/shared.module'
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    SharedModule,
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
