@@ -1,0 +1,21 @@
+<mat-card class="toolbar">
+  <button
+    mat-icon-button
+    appToggleTool
+    [segmentatorName]="'line'"
+    [selectedSegmentator]="selectedSegmentator"
+  >
+    <mat-icon>minimize</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    appToggleTool
+    [segmentatorName]="'polygon'"
+    [selectedSegmentator]="selectedSegmentator"
+  >
+    <mat-icon>gesture</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>undo</mat-icon>
+  </button>
+</mat-card>

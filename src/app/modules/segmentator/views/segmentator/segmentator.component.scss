@@ -1,6 +1,15 @@
-canvas {
-  border: 1px solid black;
-  width: 1000px;
-  height: 500px;
-  stroke: red;
+.main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  justify-items: stretch;
+  align-items: center;
+  margin-top: 12px;
+
+  &__image {
+    grid-column: 3 / 10;
+  }
+
+  &__toolbar {
+    grid-column: 11 / 11;
+  }
 }

@@ -1,0 +1,8 @@
+@use '@angular/material' as mat;
+@import '../../../../shared/scss/colors.scss';
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  background-color: mat.get-color-from-palette($accent, 200);
+}
