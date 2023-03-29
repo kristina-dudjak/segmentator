@@ -6,18 +6,18 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core'
 export class ToggleToolDirective {
   @Input() segmentatorName: string
   @Input() selectedSegmentator: string
+  private buttons: NodeListOf<Element>
 
   constructor (private el: ElementRef) {}
 
+  ngAfterViewInit () {
+    this.buttons = document.querySelectorAll('[appToggleTool]')
+  }
+
   @HostListener('click') onClick () {
-    if (this.segmentatorName === this.selectedSegmentator) {
-      this.selectedSegmentator = ''
-      this.el.nativeElement.style.backgroundColor = 'white'
-      this.el.nativeElement.style.color = 'black'
-    } else {
-      this.selectedSegmentator = this.segmentatorName
-      this.el.nativeElement.style.backgroundColor = 'blue'
-      this.el.nativeElement.style.color = 'white'
-    }
+    this.buttons.forEach(button => {
+      ;(button as HTMLElement).style.backgroundColor =
+        button === this.el.nativeElement ? 'blue' : 'white'
+    })
   }
 }
