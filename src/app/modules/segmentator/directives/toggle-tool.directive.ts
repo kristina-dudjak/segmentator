@@ -1,11 +1,9 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core'
+import { Directive, ElementRef, HostListener } from '@angular/core'
 
 @Directive({
   selector: '[appToggleTool]'
 })
 export class ToggleToolDirective {
-  @Input() segmentatorName: string
-  @Input() selectedSegmentator: string
   private buttons: NodeListOf<Element>
 
   constructor (private el: ElementRef) {}
