@@ -19,13 +19,6 @@ export class LineDrawService {
   public setCanvas (canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.context = canvas.getContext('2d')!
-    this.canvas.width = 1000
-    this.canvas.height = 500
-    const img = new Image()
-    img.src = '../assets/background.png'
-    img.onload = () => {
-      this.context.drawImage(img, 0, 0)
-    }
   }
 
   public startDrawing (event: MouseEvent) {
@@ -66,24 +59,33 @@ export class LineDrawService {
   }
 
   private updateCanvas = () => {
-    const img = new Image()
-    img.src = '../assets/background.png'
+    this.canvas.style.backgroundImage = '../assets/background.png'
+    this.canvas.style.backgroundSize = 'cover'
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.context.drawImage(img, 0, 0)
+
+    const scaleX = this.canvas.width / this.canvas.offsetWidth
+    const scaleY = this.canvas.height / this.canvas.offsetHeight
+
     this.lines.forEach(line => {
       this.context.strokeStyle = 'red'
-      this.context.lineWidth = 3
+      this.context.lineWidth = 1
       this.context.beginPath()
-      this.context.moveTo(line.start[0], line.start[1])
-      this.context.lineTo(line.end[0], line.end[1])
+      this.context.moveTo(line.start[0] * scaleX, line.start[1] * scaleY)
+      this.context.lineTo(line.end[0] * scaleX, line.end[1] * scaleY)
       this.context.stroke()
     })
     if (this.isDrawing) {
       this.context.strokeStyle = 'red'
-      this.context.lineWidth = 3
+      this.context.lineWidth = 1
       this.context.beginPath()
-      this.context.moveTo(this.currentLine.start[0], this.currentLine.start[1])
-      this.context.lineTo(this.currentLine.end[0], this.currentLine.end[1])
+      this.context.moveTo(
+        this.currentLine.start[0] * scaleX,
+        this.currentLine.start[1] * scaleY
+      )
+      this.context.lineTo(
+        this.currentLine.end[0] * scaleX,
+        this.currentLine.end[1] * scaleY
+      )
       this.context.stroke()
     }
   }
