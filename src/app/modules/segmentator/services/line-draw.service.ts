@@ -10,6 +10,8 @@ export class LineDrawService {
   private isDrawing = false
   private currentLine: any
   private lines: any[] = []
+  private scaleX: number
+  private scaleY: number
   constructor () {}
 
   public setContext (context: CanvasRenderingContext2D) {
@@ -22,22 +24,32 @@ export class LineDrawService {
   }
 
   public startDrawing (event: MouseEvent) {
-    this.isDrawing = true
+    if (event.button !== 0) {
+      return
+    }
     const [x, y] = d3.pointer(event, this.canvas)
+    if (this.isDrawing) {
+      this.currentLine.end = [x, y]
+      this.lines.push(this.currentLine)
+    }
+    this.isDrawing = true
     this.currentLine = { start: [x, y], end: [x, y] }
-    document.addEventListener('keydown', this.undoLine.bind(this, event))
-    this.canvas.addEventListener('mousedown', this.undoLine.bind(this, event))
+    this.updateCanvas()
   }
 
-  private undoLine (event: MouseEvent | KeyboardEvent) {
+  public undoLine (event: MouseEvent | KeyboardEvent) {
     if (
       this.isDrawing &&
       (event instanceof KeyboardEvent
         ? event.key === 'Backspace' || event.key === 'Delete'
         : event.button === 2)
     ) {
-      this.isDrawing = false
-      this.currentLine = { start: [0, 0], end: [0, 0] }
+      if (this.lines.length === 0) {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.isDrawing = false
+      } else {
+        this.currentLine = this.lines.pop()
+      }
       this.updateCanvas()
     }
   }
@@ -49,29 +61,29 @@ export class LineDrawService {
     const [x, y] = d3.pointer(event, this.canvas)
     this.currentLine.end = [x, y]
     this.updateCanvas()
-  }
-
-  public endDrawing () {
-    this.isDrawing = false
-    if (this.currentLine.start[0] !== 0) {
+    if (event.buttons === 1) {
       this.lines.push(this.currentLine)
+      this.currentLine = { start: [x, y], end: [x, y] }
     }
   }
 
   private updateCanvas = () => {
-    this.canvas.style.backgroundImage = '../assets/background.png'
-    this.canvas.style.backgroundSize = 'cover'
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-    const scaleX = this.canvas.width / this.canvas.offsetWidth
-    const scaleY = this.canvas.height / this.canvas.offsetHeight
+    if (!this.scaleX || !this.scaleY) {
+      this.scaleX = this.canvas.width / this.canvas.offsetWidth
+      this.scaleY = this.canvas.height / this.canvas.offsetHeight
+    }
 
     this.lines.forEach(line => {
       this.context.strokeStyle = 'red'
       this.context.lineWidth = 1
       this.context.beginPath()
-      this.context.moveTo(line.start[0] * scaleX, line.start[1] * scaleY)
-      this.context.lineTo(line.end[0] * scaleX, line.end[1] * scaleY)
+      this.context.moveTo(
+        line.start[0] * this.scaleX,
+        line.start[1] * this.scaleY
+      )
+      this.context.lineTo(line.end[0] * this.scaleX, line.end[1] * this.scaleY)
       this.context.stroke()
     })
     if (this.isDrawing) {
@@ -79,12 +91,12 @@ export class LineDrawService {
       this.context.lineWidth = 1
       this.context.beginPath()
       this.context.moveTo(
-        this.currentLine.start[0] * scaleX,
-        this.currentLine.start[1] * scaleY
+        this.currentLine.start[0] * this.scaleX,
+        this.currentLine.start[1] * this.scaleY
       )
       this.context.lineTo(
-        this.currentLine.end[0] * scaleX,
-        this.currentLine.end[1] * scaleY
+        this.currentLine.end[0] * this.scaleX,
+        this.currentLine.end[1] * this.scaleY
       )
       this.context.stroke()
     }

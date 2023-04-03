@@ -24,8 +24,10 @@ export class ImageCardComponent implements AfterViewInit {
     this.canvas.addEventListener('mousemove', event => {
       this.lineService.draw(event)
     })
-    this.canvas.addEventListener('mouseup', () => {
-      this.lineService.endDrawing()
+    document.addEventListener('keyup', event => {
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        this.lineService.undoLine(event)
+      }
     })
   }
 }
