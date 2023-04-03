@@ -29,5 +29,9 @@ export class ImageCardComponent implements AfterViewInit {
         this.lineService.undoLine(event)
       }
     })
+    this.canvas.addEventListener('contextmenu', event => {
+      event.preventDefault()
+      this.lineService.stopDrawing()
+    })
   }
 }

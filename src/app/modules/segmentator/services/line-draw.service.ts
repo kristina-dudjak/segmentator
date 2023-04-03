@@ -39,10 +39,9 @@ export class LineDrawService {
 
   public undoLine (event: MouseEvent | KeyboardEvent) {
     if (
-      this.isDrawing &&
-      (event instanceof KeyboardEvent
+      event instanceof KeyboardEvent
         ? event.key === 'Backspace' || event.key === 'Delete'
-        : event.button === 2)
+        : event.button === 2
     ) {
       if (this.lines.length === 0) {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -65,6 +64,14 @@ export class LineDrawService {
       this.lines.push(this.currentLine)
       this.currentLine = { start: [x, y], end: [x, y] }
     }
+  }
+
+  public stopDrawing () {
+    if (this.lines.length > 0) {
+      this.currentLine.end = this.lines[this.lines.length - 1]
+      this.updateCanvas()
+    }
+    this.isDrawing = false
   }
 
   private updateCanvas = () => {
