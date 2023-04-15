@@ -12,6 +12,8 @@ export class LineDrawService {
   private lines: any[] = []
   private scaleX: number
   private scaleY: number
+  private polygonPoints: number[][] = []
+
   constructor () {}
 
   public setContext (context: CanvasRenderingContext2D) {
@@ -24,17 +26,46 @@ export class LineDrawService {
   }
 
   public startDrawing (event: MouseEvent) {
-    if (event.button !== 0) {
-      return
+    const canvas = document.querySelector('canvas')
+    const rect = canvas.getBoundingClientRect()
+    const scaleX = canvas.width / rect.width
+    const scaleY = canvas.height / rect.height
+
+    const [x, y] = d3.pointer(event)
+    const point = [x * scaleX, y * scaleY]
+    this.polygonPoints.push(point)
+    if (this.polygonPoints.length >= 3) {
+      this.context.fillStyle = 'red'
+      this.context.lineWidth = 1
+      this.context.strokeStyle = 'red'
+      this.context.beginPath()
+      this.context.moveTo(this.polygonPoints[0][0], this.polygonPoints[0][1])
+      for (let i = 1; i < this.polygonPoints.length; i++) {
+        this.context.lineTo(this.polygonPoints[i][0], this.polygonPoints[i][1])
+      }
+      this.context.stroke()
     }
-    const [x, y] = d3.pointer(event, this.canvas)
-    if (this.isDrawing) {
-      this.currentLine.end = [x, y]
-      this.lines.push(this.currentLine)
+    const limit = 10
+
+    if (this.polygonPoints.length > 2) {
+      let dx = this.polygonPoints[0][0] - point[0]
+      let dy = this.polygonPoints[0][1] - point[1]
+      if (dx < 0) {
+        dx *= -1
+      }
+      if (dy < 0) {
+        dy *= -1
+      }
+      if (dx < limit && dy < limit) {
+        console.log('CLOSE!')
+        this.context.closePath()
+        this.context.fill()
+        console.log(this.polygonPoints)
+        var img = new Image()
+        img.src = canvas.toDataURL()
+        console.log(img.src)
+      }
     }
-    this.isDrawing = true
-    this.currentLine = { start: [x, y], end: [x, y] }
-    this.updateCanvas()
   }
 
   public undoLine (event: MouseEvent | KeyboardEvent) {
