@@ -1,10 +1,9 @@
 <mat-card class="toolbar">
-  <button mat-icon-button appToggleTool>
-    <mat-icon>minimize</mat-icon>
-  </button>
-  <button mat-icon-button appToggleTool>
-    <mat-icon>gesture</mat-icon>
-  </button>
+  <div *ngFor="let tool of tools">
+    <button mat-icon-button appToggleTool (click)="change(tool)">
+      <mat-icon>{{ tool.icon }}</mat-icon>
+    </button>
+  </div>
   <button mat-icon-button>
     <mat-icon>undo</mat-icon>
   </button>

@@ -1,4 +1,11 @@
 <main class="main">
-  <app-image-card class="main__image"></app-image-card>
-  <app-toolbar class="main__toolbar"></app-toolbar>
+  <app-image-card
+    [selectedTool]="selectedTool"
+    class="main__image"
+  ></app-image-card>
+  <app-toolbar
+    [tools]="tools"
+    [selectedTool]="selectedTool"
+    class="main__toolbar"
+  ></app-toolbar>
 </main>
