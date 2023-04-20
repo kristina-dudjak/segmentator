@@ -1,7 +1,9 @@
 import { Component } from '@angular/core'
 import { Tool } from '../../models/Tool'
 import { LineTool } from '../../services/line-tool.service'
-import { RectToolService } from '../../services/rect-tool.service'
+import { RectTool } from '../../services/rect-tool.service'
+import { ToolState } from '../../store/tool.state'
+import { Store } from '@ngrx/store'
 
 @Component({
   selector: 'app-segmentator',
@@ -9,6 +11,8 @@ import { RectToolService } from '../../services/rect-tool.service'
   styleUrls: ['./segmentator.component.scss']
 })
 export class SegmentatorComponent {
-  tools: Tool[] = [new LineTool(), new RectToolService()]
-  selectedTool: Tool = new LineTool()
+  constructor (private store: Store<ToolState>) {}
+
+  tools: Tool[] = [new LineTool(), new RectTool()]
+  public selectedTool$ = this.store.select(state => state.tool)
 }

@@ -8,6 +8,9 @@ import { ImageCardComponent } from './components/image-card/image-card.component
 import { ToolbarComponent } from './components/toolbar/toolbar.component'
 import { ImageBundleComponent } from './components/image-bundle/image-bundle.component'
 import { ToggleToolDirective } from './directives/toggle-tool.directive'
+import { StoreModule } from '@ngrx/store'
+import { toolFeatureKey } from './store/tool.actions'
+import { toolReducer } from './store/tool.reducer'
 
 @NgModule({
   declarations: [
@@ -17,6 +20,11 @@ import { ToggleToolDirective } from './directives/toggle-tool.directive'
     ImageBundleComponent,
     ToggleToolDirective
   ],
-  imports: [CommonModule, SegmentatorRoutingModule, SharedModule]
+  imports: [
+    CommonModule,
+    SegmentatorRoutingModule,
+    SharedModule,
+    StoreModule.forFeature(toolFeatureKey, toolReducer)
+  ]
 })
 export class SegmentatorModule {}

@@ -1,11 +1,7 @@
 <main class="main">
   <app-image-card
-    [selectedTool]="selectedTool"
+    [tool]="selectedTool$ | async"
     class="main__image"
   ></app-image-card>
-  <app-toolbar
-    [tools]="tools"
-    [selectedTool]="selectedTool"
-    class="main__toolbar"
-  ></app-toolbar>
+  <app-toolbar [tools]="tools" class="main__toolbar"></app-toolbar>
 </main>

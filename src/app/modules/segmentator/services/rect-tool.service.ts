@@ -4,10 +4,10 @@ import { Tool } from '../models/Tool'
 @Injectable({
   providedIn: 'root'
 })
-export class RectToolService implements Tool {
+export class RectTool implements Tool {
   constructor () {}
   icon: string = 'gesture'
-  draw (event: MouseEvent) {
-    throw new Error('Method not implemented.')
+  draw (event: MouseEvent, canvas: HTMLCanvasElement) {
+    console.log('rect draw')
   }
 }

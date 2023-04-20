@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing'
-import { RectToolService } from './rect-tool.service'
+import { RectTool } from './rect-tool.service'
 
 describe('RectDrawService', () => {
-  let service: RectToolService
+  let service: RectTool
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(RectToolService)
+    service = TestBed.inject(RectTool)
   })
 
   it('should be created', () => {

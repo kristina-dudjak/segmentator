@@ -1,5 +1,8 @@
 import { Component, Input } from '@angular/core'
 import { Tool } from '../../models/Tool'
+import { Store } from '@ngrx/store'
+import { ToolState } from '../../store/tool.state'
+import { toggleTool } from '../../store/tool.actions'
 
 @Component({
   selector: 'app-toolbar',
@@ -8,12 +11,9 @@ import { Tool } from '../../models/Tool'
 })
 export class ToolbarComponent {
   @Input() tools: Tool[]
-  @Input() selectedTool: Tool
-  constructor () {}
+  constructor (private store: Store<ToolState>) {}
 
-  change (tool) {
-    console.log(this.selectedTool)
-    this.selectedTool = tool
-    console.log(this.selectedTool)
+  change (tool: Tool) {
+    this.store.dispatch(toggleTool({ tool }))
   }
 }
