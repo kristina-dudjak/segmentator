@@ -1,7 +1,8 @@
-<main class="main">
-  <app-image-card
-    [tool]="selectedTool$ | async"
-    class="main__image"
-  ></app-image-card>
-  <app-toolbar [tools]="tools" class="main__toolbar"></app-toolbar>
+<main class="main" *ngIf="selectedTool$ | async as tool">
+  <app-image-card [tool]="tool" class="main__image"></app-image-card>
+  <app-toolbar
+    [tools]="tools"
+    [selectedTool]="tool"
+    class="main__toolbar"
+  ></app-toolbar>
 </main>

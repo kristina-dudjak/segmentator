@@ -11,6 +11,7 @@ import { toggleTool } from '../../store/tool.actions'
 })
 export class ToolbarComponent {
   @Input() tools: Tool[]
+  @Input() selectedTool: any
   constructor (private store: Store<ToolState>) {}
 
   change (tool: Tool) {

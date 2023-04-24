@@ -7,7 +7,7 @@ import { Tool } from '../models/Tool'
 export class RectTool implements Tool {
   constructor () {}
   icon: string = 'gesture'
-  draw (event: MouseEvent, canvas: HTMLCanvasElement) {
+  draw (event: MouseEvent, canvas: HTMLCanvasElement, points: number[][]) {
     console.log('rect draw')
   }
 }

@@ -5,7 +5,6 @@ import {
   Input,
   ViewChild
 } from '@angular/core'
-import { Tool } from '../../models/Tool'
 
 @Component({
   selector: 'app-image-card',
@@ -14,13 +13,14 @@ import { Tool } from '../../models/Tool'
 })
 export class ImageCardComponent implements AfterViewInit {
   @ViewChild('canvas') canvasRef!: ElementRef
-  @Input() tool: Tool
+  @Input() tool!: any
   private canvas!: HTMLCanvasElement
+  points: number[][] = []
 
   ngAfterViewInit () {
     this.canvas = this.canvasRef.nativeElement
     this.canvas.addEventListener('mousedown', event => {
-      this.tool.draw(event, this.canvas)
+      this.tool.tool.draw(event, this.canvas, this.points)
     })
   }
 }

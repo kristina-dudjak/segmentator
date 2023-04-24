@@ -6,3 +6,7 @@
   flex-direction: column;
   background-color: mat.get-color-from-palette($accent, 200);
 }
+
+.selected {
+  background-color: mat.get-color-from-palette($accent, 500);
+}

@@ -1,6 +1,10 @@
 <mat-card class="toolbar">
   <div *ngFor="let tool of tools">
-    <button mat-icon-button appToggleTool (click)="change(tool)">
+    <button
+      [class.selected]="tool.icon === selectedTool.tool.icon"
+      mat-icon-button
+      (click)="change(tool)"
+    >
       <mat-icon>{{ tool.icon }}</mat-icon>
     </button>
   </div>
