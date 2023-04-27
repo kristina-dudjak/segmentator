@@ -1,4 +1,5 @@
 <main class="main" *ngIf="selectedTool$ | async as tool">
+  <app-sidebar class="main__sidebar"></app-sidebar>
   <app-image-card [tool]="tool" class="main__image"></app-image-card>
   <app-toolbar
     [tools]="tools"

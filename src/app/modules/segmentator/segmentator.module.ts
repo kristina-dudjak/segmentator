@@ -10,7 +10,8 @@ import { ImageBundleComponent } from './components/image-bundle/image-bundle.com
 import { ToggleToolDirective } from './directives/toggle-tool.directive'
 import { StoreModule } from '@ngrx/store'
 import { toolFeatureKey } from './store/tool.actions'
-import { toolReducer } from './store/tool.reducer'
+import { toolReducer } from './store/tool.reducer';
+import { SidebarComponent } from './components/sidebar/sidebar.component'
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { toolReducer } from './store/tool.reducer'
     ImageCardComponent,
     ToolbarComponent,
     ImageBundleComponent,
-    ToggleToolDirective
+    ToggleToolDirective,
+    SidebarComponent
   ],
   imports: [
     CommonModule,
