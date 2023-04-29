@@ -1,7 +1,7 @@
 <mat-card class="toolbar">
   <div *ngFor="let tool of tools">
     <button
-      [class.selected]="tool.icon === selectedTool.tool.icon"
+      [class.selected]="tool.icon === selectedTool.icon"
       mat-icon-button
       (click)="change(tool)"
     >

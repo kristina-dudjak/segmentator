@@ -1,18 +1,25 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Tool } from '../../models/Tool'
 import { LineTool } from '../../services/line-tool.service'
 import { RectTool } from '../../services/rect-tool.service'
-import { ToolState } from '../../store/tool.state'
 import { Store } from '@ngrx/store'
+import { SegmentatorState } from '../../store/segmentator.state'
+import { getImagesRequest } from '../../store/segmentator.actions'
+import { getImages, getTool } from '../../store/segmentator.selectors'
 
 @Component({
   selector: 'app-segmentator',
   templateUrl: './segmentator.component.html',
   styleUrls: ['./segmentator.component.scss']
 })
-export class SegmentatorComponent {
-  constructor (private store: Store<ToolState>) {}
+export class SegmentatorComponent implements OnInit {
+  constructor (private store: Store<SegmentatorState>) {}
 
+  public selectedTool$ = this.store.select(getTool)
+  public images$ = this.store.select(getImages)
   tools: Tool[] = [new LineTool(), new RectTool()]
-  public selectedTool$ = this.store.select(state => state.tool)
+
+  ngOnInit (): void {
+    this.store.dispatch(getImagesRequest())
+  }
 }

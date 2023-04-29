@@ -9,9 +9,11 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component'
 import { ImageBundleComponent } from './components/image-bundle/image-bundle.component'
 import { ToggleToolDirective } from './directives/toggle-tool.directive'
 import { StoreModule } from '@ngrx/store'
-import { toolFeatureKey } from './store/tool.actions'
-import { toolReducer } from './store/tool.reducer';
 import { SidebarComponent } from './components/sidebar/sidebar.component'
+import { EffectsModule } from '@ngrx/effects'
+import { segmentatorFeatureKey } from './store/segmentator.actions'
+import { segmentatorReducer } from './store/segmentator.reducer'
+import { SegmentatorEffects } from './store/segmentator.effects'
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component'
     CommonModule,
     SegmentatorRoutingModule,
     SharedModule,
-    StoreModule.forFeature(toolFeatureKey, toolReducer)
+    StoreModule.forFeature(segmentatorFeatureKey, segmentatorReducer),
+    EffectsModule.forFeature([SegmentatorEffects])
   ]
 })
 export class SegmentatorModule {}
