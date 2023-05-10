@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core'
+import { Tool } from '../../models/Tool'
 
 @Component({
   selector: 'app-image-card',
@@ -15,7 +16,7 @@ import {
 })
 export class ImageCardComponent implements AfterViewInit, OnChanges {
   @ViewChild('canvas') canvasRef!: ElementRef
-  @Input() tool!: any
+  @Input() tool!: Tool
   private canvas!: HTMLCanvasElement
   points: number[][] = []
   rectPoints: number[][] = []
@@ -23,23 +24,23 @@ export class ImageCardComponent implements AfterViewInit, OnChanges {
   ngAfterViewInit () {
     this.canvas = this.canvasRef.nativeElement
     this.canvas.addEventListener('mousedown', event => {
-      this.tool.tool.draw(event, this.canvas, this.points)
+      this.tool.draw(event, this.canvas, this.points)
     })
   }
   ngOnChanges (changes: SimpleChanges) {
     if (this.canvas) {
-      switch (this.tool.tool.constructor.name) {
+      switch (this.tool.constructor.name) {
         case 'LineTool': {
           console.log('line')
           this.canvas.addEventListener('mousedown', event => {
-            this.tool.tool.draw(event, this.canvas, this.points)
+            this.tool.draw(event, this.canvas, this.points)
           })
           break
         }
         case 'RectTool': {
           console.log('rect')
           this.canvas.addEventListener('mousedown', event => {
-            this.tool.tool.draw(event, this.canvas, this.rectPoints)
+            this.tool.draw(event, this.canvas, this.rectPoints)
           })
         }
       }

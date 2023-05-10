@@ -1,11 +1,3 @@
-<div class="sidebar">
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
-  <img class="sidebar__img" src="../../../../../assets/background.png" />
+<div class="sidebar" *ngFor="let image of images">
+  <img class="sidebar__img" [src]="image" />
 </div>
