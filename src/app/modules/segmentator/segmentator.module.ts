@@ -6,7 +6,6 @@ import { SharedModule } from 'src/app/shared/shared.module'
 import { SegmentatorComponent } from './views/segmentator/segmentator.component'
 import { ImageCardComponent } from './components/image-card/image-card.component'
 import { ToolbarComponent } from './components/toolbar/toolbar.component'
-import { ImageBundleComponent } from './components/image-bundle/image-bundle.component'
 import { ToggleToolDirective } from './directives/toggle-tool.directive'
 import { StoreModule } from '@ngrx/store'
 import { SidebarComponent } from './components/sidebar/sidebar.component'
@@ -20,7 +19,6 @@ import { SegmentatorEffects } from './store/segmentator.effects'
     SegmentatorComponent,
     ImageCardComponent,
     ToolbarComponent,
-    ImageBundleComponent,
     ToggleToolDirective,
     SidebarComponent
   ],
