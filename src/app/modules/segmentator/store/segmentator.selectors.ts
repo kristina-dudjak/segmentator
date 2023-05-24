@@ -15,3 +15,8 @@ export const getImages = createSelector(
   segmentatorFeatureSelector,
   (state: SegmentatorState) => state.images
 )
+
+export const getImage = createSelector(
+  segmentatorFeatureSelector,
+  (state: SegmentatorState) => state.selectedImage
+)

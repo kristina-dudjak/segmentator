@@ -4,7 +4,6 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  SimpleChanges,
   ViewChild
 } from '@angular/core'
 import { Tool } from '../../models/Tool'
@@ -14,9 +13,11 @@ import { Tool } from '../../models/Tool'
   templateUrl: './image-card.component.html',
   styleUrls: ['./image-card.component.scss']
 })
-export class ImageCardComponent implements AfterViewInit, OnChanges {
+export class ImageCardComponent implements OnChanges, AfterViewInit {
   @ViewChild('canvas') canvasRef!: ElementRef
   @Input() tool!: Tool
+  @Input() image: string
+  @Input() images: string[]
   private canvas!: HTMLCanvasElement
   points: number[][] = []
   rectPoints: number[][] = []
@@ -27,7 +28,8 @@ export class ImageCardComponent implements AfterViewInit, OnChanges {
       this.tool.draw(event, this.canvas, this.points)
     })
   }
-  ngOnChanges (changes: SimpleChanges) {
+
+  ngOnChanges () {
     if (this.canvas) {
       switch (this.tool.constructor.name) {
         case 'LineTool': {

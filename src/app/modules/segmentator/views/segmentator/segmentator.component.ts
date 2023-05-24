@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { Tool } from '../../models/Tool'
-import { LineTool } from '../../services/line-tool.service'
-import { RectTool } from '../../services/rect-tool.service'
 import { Store } from '@ngrx/store'
 import { SegmentatorState } from '../../store/segmentator.state'
 import { getImagesRequest } from '../../store/segmentator.actions'
-import { getImages, getTool } from '../../store/segmentator.selectors'
+import { getImage, getImages, getTool } from '../../store/segmentator.selectors'
 
 @Component({
   selector: 'app-segmentator',
@@ -17,9 +14,9 @@ export class SegmentatorComponent implements OnInit {
 
   public selectedTool$ = this.store.select(getTool)
   public images$ = this.store.select(getImages)
-  tools: Tool[] = [new LineTool(), new RectTool()]
+  public image$ = this.store.select(getImage)
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.store.dispatch(getImagesRequest())
   }
 }

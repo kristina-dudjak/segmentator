@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { mergeMap } from 'rxjs'
+import { catchError, concatMap, of } from 'rxjs'
 import { DbService } from '../services/db.service'
 import {
   getImagesFailure,
   getImagesRequest,
-  getImagesSuccess
+  getImagesSuccess,
+  selectImage
 } from './segmentator.actions'
 
 @Injectable()
@@ -15,14 +16,17 @@ export class SegmentatorEffects {
   getImages$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getImagesRequest),
-      mergeMap(async () => {
-        try {
-          const images = await this.dbService.getImages()
-          return getImagesSuccess({ images: images })
-        } catch (error) {
-          return getImagesFailure(error)
-        }
-      })
+      concatMap(() =>
+        this.dbService.getImages().pipe(
+          concatMap(images => {
+            return [
+              selectImage({ selectedImage: images[0] }),
+              getImagesSuccess({ images })
+            ]
+          }),
+          catchError(error => of(getImagesFailure(error)))
+        )
+      )
     )
   )
 }

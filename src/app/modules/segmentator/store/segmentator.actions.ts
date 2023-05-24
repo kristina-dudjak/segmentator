@@ -25,3 +25,10 @@ export const getImagesFailure = createAction(
   `[${segmentatorFeatureKey}] getImages Failure`,
   props<{ error: string }>()
 )
+
+export const selectImage = createAction(
+  `[${segmentatorFeatureKey}] Select Image`,
+  props<{
+    selectedImage: string
+  }>()
+)

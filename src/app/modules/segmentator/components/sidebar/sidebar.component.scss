@@ -1,6 +1,14 @@
 .sidebar {
   &__img {
     width: 80%;
-    opacity: 0.5;
+    cursor: pointer;
   }
+}
+
+.chosen {
+  opacity: 1;
+}
+
+.notChosen {
+  opacity: 0.5;
 }

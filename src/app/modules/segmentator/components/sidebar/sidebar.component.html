@@ -1,3 +1,7 @@
-<div class="sidebar" *ngFor="let image of images">
-  <img class="sidebar__img" [src]="image" />
+<div
+  class="sidebar"
+  *ngFor="let image of images"
+  [ngClass]="image == (selectedImage$ | async) ? 'chosen' : 'notChosen'"
+>
+  <img class="sidebar__img" [src]="image" (click)="change(image)" />
 </div>

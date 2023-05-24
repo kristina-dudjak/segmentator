@@ -4,6 +4,7 @@ import {
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
+  selectImage,
   toggleTool
 } from './segmentator.actions'
 
@@ -21,5 +22,9 @@ export const segmentatorReducer = createReducer(
   on(getImagesFailure, (state, { error }) => ({
     ...state,
     error: error
+  })),
+  on(selectImage, (state, { selectedImage }) => ({
+    ...state,
+    selectedImage
   }))
 )

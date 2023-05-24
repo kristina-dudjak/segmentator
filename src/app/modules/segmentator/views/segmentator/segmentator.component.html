@@ -1,13 +1,20 @@
-<main class="main" *ngIf="selectedTool$ | async as selectedTool">
+<main class="main" *ngIf="images$ | async as images">
   <app-sidebar
     class="main__sidebar"
-    *ngIf="images$ | async as images"
+    *ngIf="images.length !== 0"
     [images]="images"
   ></app-sidebar>
-  <app-image-card class="main__image" [tool]="selectedTool"></app-image-card>
-  <app-toolbar
-    class="main__toolbar"
-    [tools]="tools"
-    [selectedTool]="selectedTool"
-  ></app-toolbar>
+  <ng-container *ngIf="selectedTool$ | async as selectedTool">
+    <app-image-card
+      class="main__image"
+      *ngIf="images.length !== 0 && (image$ | async) as image"
+      [tool]="selectedTool"
+      [image]="image"
+      [images]="images"
+    ></app-image-card>
+    <app-toolbar
+      class="main__toolbar"
+      [selectedTool]="selectedTool"
+    ></app-toolbar>
+  </ng-container>
 </main>
