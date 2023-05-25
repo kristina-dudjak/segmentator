@@ -24,6 +24,12 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit () {
     this.canvas = this.canvasRef.nativeElement
+    const img = new Image()
+    img.src = this.image
+    img.addEventListener('load', () => {
+      this.canvas.width = img.width
+      this.canvas.height = img.height
+    })
     this.canvas.addEventListener('mousedown', event => {
       this.tool.draw(event, this.canvas, this.points)
     })
