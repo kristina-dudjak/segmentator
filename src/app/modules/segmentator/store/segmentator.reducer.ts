@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store'
 import { initialState } from './segmentator.state'
 import {
+  addPoint,
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
@@ -26,5 +27,13 @@ export const segmentatorReducer = createReducer(
   on(selectImage, (state, { selectedImage }) => ({
     ...state,
     selectedImage
-  }))
+  })),
+  on(addPoint, (state, { image, point }) => {
+    const updatedImages = state.images.map(img =>
+      img === image ? { ...img, points: [...img.points, point] } : img
+    )
+    return state.images === updatedImages
+      ? state
+      : { ...state, images: updatedImages }
+  })
 )

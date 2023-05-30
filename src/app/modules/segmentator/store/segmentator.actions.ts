@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store'
 import { Tool } from '../models/Tool'
+import { ImageData } from './segmentator.state'
 
 export const segmentatorFeatureKey = 'segmentator'
 
@@ -17,7 +18,7 @@ export const getImagesRequest = createAction(
 export const getImagesSuccess = createAction(
   `[${segmentatorFeatureKey}] getImages Success`,
   props<{
-    images: string[]
+    images: ImageData[]
   }>()
 )
 
@@ -31,4 +32,9 @@ export const selectImage = createAction(
   props<{
     selectedImage: string
   }>()
+)
+
+export const addPoint = createAction(
+  `[${segmentatorFeatureKey}] Add Point`,
+  props<{ image: ImageData; point: number[] }>()
 )

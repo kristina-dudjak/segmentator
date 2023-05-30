@@ -1,7 +1,7 @@
 <div
   class="sidebar"
   *ngFor="let image of images"
-  [ngClass]="image == (selectedImage$ | async) ? 'chosen' : 'notChosen'"
+  [ngClass]="image.url == (selectedImage$ | async) ? 'chosen' : 'notChosen'"
 >
-  <img class="sidebar__img" [src]="image" (click)="change(image)" />
+  <img class="sidebar__img" [src]="image.url" (click)="change(image.url)" />
 </div>

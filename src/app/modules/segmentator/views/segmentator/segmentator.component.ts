@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { SegmentatorState } from '../../store/segmentator.state'
+import { ImageData, SegmentatorState } from '../../store/segmentator.state'
 import { getImagesRequest } from '../../store/segmentator.actions'
 import { getImage, getImages, getTool } from '../../store/segmentator.selectors'
 
@@ -18,5 +18,9 @@ export class SegmentatorComponent implements OnInit {
 
   ngOnInit () {
     this.store.dispatch(getImagesRequest())
+  }
+
+  trackByUrl (index: number, image: ImageData): string {
+    return image.url
   }
 }

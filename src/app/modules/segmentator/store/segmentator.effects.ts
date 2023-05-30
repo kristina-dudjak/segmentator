@@ -18,10 +18,15 @@ export class SegmentatorEffects {
       ofType(getImagesRequest),
       concatMap(() =>
         this.dbService.getImages().pipe(
-          concatMap(images => {
+          concatMap((imageUrls: string[]) => {
             return [
-              selectImage({ selectedImage: images[0] }),
-              getImagesSuccess({ images })
+              selectImage({ selectedImage: imageUrls[0] }),
+              getImagesSuccess({
+                images: imageUrls.map(url => ({
+                  url: url,
+                  points: []
+                }))
+              })
             ]
           }),
           catchError(error => of(getImagesFailure(error)))

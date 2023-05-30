@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core'
 import { Tool } from '../models/Tool'
 import * as d3 from 'd3'
+import { ImageData } from '../store/segmentator.state'
 @Injectable({
   providedIn: 'root'
 })
 export class RectTool implements Tool {
+  update: (canvas: HTMLCanvasElement, image: ImageData) => void
   icon: string = 'gesture'
-  draw (event: MouseEvent, canvas: HTMLCanvasElement, points: number[][]) {
+  draw (event: MouseEvent, canvas: HTMLCanvasElement, image: ImageData) {
     const context = canvas.getContext('2d')!
     const rect = canvas.getBoundingClientRect()
     const scaleX = canvas.width / rect.width

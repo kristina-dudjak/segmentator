@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { SegmentatorState } from '../../store/segmentator.state'
+import { ImageData, SegmentatorState } from '../../store/segmentator.state'
 import { selectImage } from '../../store/segmentator.actions'
 import { getImage } from '../../store/segmentator.selectors'
 
@@ -10,7 +10,7 @@ import { getImage } from '../../store/segmentator.selectors'
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
-  @Input() images: string[]
+  @Input() images: ImageData[]
   selectedImage$ = this.store.select(getImage)
   constructor (private store: Store<SegmentatorState>) {}
 
