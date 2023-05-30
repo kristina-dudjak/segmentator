@@ -8,6 +8,8 @@ export interface Tool {
     event: MouseEvent,
     canvas: HTMLCanvasElement,
     image: ImageData,
-    state: Store<SegmentatorState>
+    store: Store<SegmentatorState>,
+    isDrawing: boolean
   ) => void
+  undo: (image: ImageData, store: Store<SegmentatorState>) => void
 }

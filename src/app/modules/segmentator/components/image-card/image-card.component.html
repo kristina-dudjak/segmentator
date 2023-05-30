@@ -1,5 +1,8 @@
 <canvas
   class="canvas"
   #canvas
+  (mousedown)="onMouseDown($event)"
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()"
   [ngStyle]="{ 'background-image': 'url(' + image.url + ')' }"
 ></canvas>

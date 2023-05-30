@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { Tool } from '../models/Tool'
 import { ImageData, SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
-import { addPoint } from '../store/segmentator.actions'
+import { addPoint, removeLastPoint } from '../store/segmentator.actions'
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +55,8 @@ export class LineTool implements Tool {
     event: MouseEvent,
     canvas: HTMLCanvasElement,
     image: ImageData,
-    store: Store<SegmentatorState>
+    store: Store<SegmentatorState>,
+    isDrawing: boolean
   ) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = canvas.width / rect.width
@@ -63,6 +64,19 @@ export class LineTool implements Tool {
 
     const [x, y] = d3.pointer(event)
     const point = [x * scaleX, y * scaleY]
-    store.dispatch(addPoint({ image: image, point }))
+    if (event.type === 'mousedown') {
+      isDrawing = true
+      store.dispatch(addPoint({ image: image, point }))
+    } else if (event.type === 'mousemove') {
+      if (isDrawing) {
+        store.dispatch(addPoint({ image: image, point }))
+      }
+    } else if (event.type === 'mouseup') {
+      isDrawing = false
+    }
+  }
+
+  undo (image: ImageData, store: Store<SegmentatorState>) {
+    store.dispatch(removeLastPoint({ image: image }))
   }
 }

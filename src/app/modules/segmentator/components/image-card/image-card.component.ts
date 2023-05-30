@@ -22,8 +22,24 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
   @Input() image: ImageData
   private canvas: HTMLCanvasElement
   rectPoints: number[][] = []
+  isDrawing = false
 
   constructor (private store: Store<SegmentatorState>) {}
+
+  onMouseDown (event: MouseEvent) {
+    this.isDrawing = true
+    this.tool.draw(event, this.canvas, this.image, this.store, this.isDrawing)
+  }
+
+  onMouseMove (event: MouseEvent) {
+    if (this.isDrawing) {
+      this.tool.draw(event, this.canvas, this.image, this.store, this.isDrawing)
+    }
+  }
+
+  onMouseUp () {
+    this.isDrawing = false
+  }
 
   ngAfterViewInit () {
     this.canvas = this.canvasRef.nativeElement
@@ -35,7 +51,16 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
       this.tool.update(this.canvas, this.image)
     })
     this.canvas.addEventListener('mousedown', event => {
-      this.tool.draw(event, this.canvas, this.image, this.store)
+      this.tool.draw(event, this.canvas, this.image, this.store, this.isDrawing)
+    })
+
+    this.canvas.tabIndex = 0
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        this.tool.undo(this.image, this.store)
+        this.tool.update(this.canvas, this.image)
+      }
     })
   }
 

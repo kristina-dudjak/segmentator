@@ -38,3 +38,8 @@ export const addPoint = createAction(
   `[${segmentatorFeatureKey}] Add Point`,
   props<{ image: ImageData; point: number[] }>()
 )
+
+export const removeLastPoint = createAction(
+  `[${segmentatorFeatureKey}] Remove Point`,
+  props<{ image: ImageData }>()
+)
