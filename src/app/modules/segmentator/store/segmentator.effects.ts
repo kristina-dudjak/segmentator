@@ -24,7 +24,7 @@ export class SegmentatorEffects {
               getImagesSuccess({
                 images: imageUrls.map(url => ({
                   url: url,
-                  points: []
+                  shapes: []
                 }))
               })
             ]

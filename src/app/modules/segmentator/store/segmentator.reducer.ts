@@ -1,11 +1,10 @@
 import { createReducer, on } from '@ngrx/store'
 import { initialState } from './segmentator.state'
 import {
-  addPoint,
+  addShape,
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
-  removeLastPoint,
   selectImage,
   toggleTool
 } from './segmentator.actions'
@@ -29,21 +28,14 @@ export const segmentatorReducer = createReducer(
     ...state,
     selectedImage
   })),
-  on(addPoint, (state, { image, point }) => {
+  on(addShape, (state, { image, shapeType, points }) => {
     const updatedImages = state.images.map(img =>
-      img === image ? { ...img, points: [...img.points, point] } : img
+      img === image
+        ? { ...img, shapes: [...img.shapes, { shapeType, points }] }
+        : img
     )
     return state.images === updatedImages
       ? state
       : { ...state, images: updatedImages }
-  }),
-  on(removeLastPoint, (state, { image }) => {
-    const updatedImages = state.images.map(img =>
-      img === image ? { ...img, points: img.points.slice(0, -1) } : img
-    )
-    return {
-      ...state,
-      images: updatedImages
-    }
   })
 )

@@ -21,25 +21,25 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
   @Input() tool: Tool
   @Input() image: ImageData
   private canvas: HTMLCanvasElement
-  rectPoints: number[][] = []
-  isDrawing = false
+  private points: number[][] = []
+  private isDrawing = false
 
   constructor (private store: Store<SegmentatorState>) {}
 
   onMouseDown (event: MouseEvent) {
     this.isDrawing = true
-    this.tool.draw(event, this.canvas, this.image, this.store)
+    this.tool.draw(event, this.canvas, this.image, this.store, this.points)
   }
 
   onMouseMove (event: MouseEvent) {
     if (this.isDrawing) {
-      this.tool.draw(event, this.canvas, this.image, this.store)
+      this.tool.draw(event, this.canvas, this.image, this.store, this.points)
     }
   }
 
   onMouseUp (event: MouseEvent) {
     this.isDrawing = false
-    this.tool.draw(event, this.canvas, this.image, this.store)
+    this.tool.draw(event, this.canvas, this.image, this.store, this.points)
   }
 
   ngAfterViewInit () {
@@ -63,6 +63,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
   ngOnChanges (change: SimpleChanges) {
     if (this.canvas) {
       this.tool.update(this.canvas, this.image)
+      this.points = []
     }
   }
 }
