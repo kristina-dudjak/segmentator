@@ -28,17 +28,18 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
 
   onMouseDown (event: MouseEvent) {
     this.isDrawing = true
-    this.tool.draw(event, this.canvas, this.image, this.store, this.isDrawing)
+    this.tool.draw(event, this.canvas, this.image, this.store)
   }
 
   onMouseMove (event: MouseEvent) {
     if (this.isDrawing) {
-      this.tool.draw(event, this.canvas, this.image, this.store, this.isDrawing)
+      this.tool.draw(event, this.canvas, this.image, this.store)
     }
   }
 
-  onMouseUp () {
+  onMouseUp (event: MouseEvent) {
     this.isDrawing = false
+    this.tool.draw(event, this.canvas, this.image, this.store)
   }
 
   ngAfterViewInit () {
@@ -50,11 +51,6 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
       this.canvas.height = img.height
       this.tool.update(this.canvas, this.image)
     })
-    this.canvas.addEventListener('mousedown', event => {
-      this.tool.draw(event, this.canvas, this.image, this.store, this.isDrawing)
-    })
-
-    this.canvas.tabIndex = 0
 
     document.addEventListener('keydown', event => {
       if (event.key === 'Delete' || event.key === 'Backspace') {

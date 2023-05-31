@@ -55,8 +55,7 @@ export class LineTool implements Tool {
     event: MouseEvent,
     canvas: HTMLCanvasElement,
     image: ImageData,
-    store: Store<SegmentatorState>,
-    isDrawing: boolean
+    store: Store<SegmentatorState>
   ) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = canvas.width / rect.width
@@ -64,19 +63,10 @@ export class LineTool implements Tool {
 
     const [x, y] = d3.pointer(event)
     const point = [x * scaleX, y * scaleY]
-    if (event.type === 'mousedown') {
-      isDrawing = true
-      store.dispatch(addPoint({ image: image, point }))
-    } else if (event.type === 'mousemove') {
-      if (isDrawing) {
-        store.dispatch(addPoint({ image: image, point }))
-      }
-    } else if (event.type === 'mouseup') {
-      isDrawing = false
-    }
+    store.dispatch(addPoint({ image, point }))
   }
 
   undo (image: ImageData, store: Store<SegmentatorState>) {
-    store.dispatch(removeLastPoint({ image: image }))
+    store.dispatch(removeLastPoint({ image }))
   }
 }

@@ -3,6 +3,6 @@
   #canvas
   (mousedown)="onMouseDown($event)"
   (mousemove)="onMouseMove($event)"
-  (mouseup)="onMouseUp()"
+  (mouseup)="onMouseUp($event)"
   [ngStyle]="{ 'background-image': 'url(' + image.url + ')' }"
 ></canvas>
