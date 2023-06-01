@@ -3,20 +3,19 @@ import { Tool } from '../models/Tool'
 import * as d3 from 'd3'
 import { ImageData, SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
-import { addShape } from '../store/segmentator.actions'
+import { addShape, removeShape } from '../store/segmentator.actions'
 @Injectable({
   providedIn: 'root'
 })
 export class RectTool implements Tool {
   icon: string = 'gesture'
 
-  undo (image: ImageData, store: Store<SegmentatorState>) {}
-
   update (canvas: HTMLCanvasElement, image: ImageData) {
     const context = canvas.getContext('2d')!
-    context.fillStyle = 'red'
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.fillStyle = 'rgba(255, 0, 0, 0.4)'
     context.lineWidth = 1
-    context.strokeStyle = 'red'
+    context.strokeStyle = 'rgba(255, 0, 0, 0.4)'
 
     for (let i = 0; i < image.shapes.length; i++) {
       if (image.shapes[i].shapeType === 'line') {
@@ -40,7 +39,7 @@ export class RectTool implements Tool {
             image.shapes[i].points[1][0] - image.shapes[i].points[0][0]
           const height =
             image.shapes[i].points[1][1] - image.shapes[i].points[0][1]
-          context.fillStyle = 'red'
+          context.fillStyle = 'rgba(255, 0, 0, 0.4)'
           context.fillRect(
             image.shapes[i].points[0][0],
             image.shapes[i].points[0][1],
@@ -72,10 +71,25 @@ export class RectTool implements Tool {
       if (points.length >= 2) {
         const width = points[1][0] - points[0][0]
         const height = points[1][1] - points[0][1]
-        context.fillStyle = 'red'
+        context.fillStyle = 'rgba(255, 0, 0, 0.4)'
         context.fillRect(points[0][0], points[0][1], width, height)
         store.dispatch(addShape({ image, shapeType: 'rect', points: points }))
       }
     }
+  }
+
+  undo (
+    canvas: HTMLCanvasElement,
+    image: ImageData,
+    store: Store<SegmentatorState>,
+    points: number[][]
+  ) {
+    points.pop()
+    if (points.length === 0) {
+      store.dispatch(removeShape({ image }))
+      return
+    }
+    const context = canvas.getContext('2d')!
+    context.clearRect(0, 0, canvas.width, canvas.height)
   }
 }

@@ -10,6 +10,7 @@ import {
 import { Tool } from '../../models/Tool'
 import { ImageData, SegmentatorState } from '../../store/segmentator.state'
 import { Store } from '@ngrx/store'
+import { RectTool } from '../../services/rect-tool.service'
 
 @Component({
   selector: 'app-image-card',
@@ -39,7 +40,9 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
 
   onMouseUp (event: MouseEvent) {
     this.isDrawing = false
-    this.tool.draw(event, this.canvas, this.image, this.store, this.points)
+    if (this.tool instanceof RectTool) {
+      this.tool.draw(event, this.canvas, this.image, this.store, this.points)
+    }
   }
 
   ngAfterViewInit () {
@@ -53,10 +56,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
     })
 
     document.addEventListener('keydown', event => {
-      if (event.key === 'Delete' || event.key === 'Backspace') {
-        this.tool.undo(this.image, this.store)
-        this.tool.update(this.canvas, this.image)
-      }
+      this.tool.undo(this.canvas, this.image, this.store, this.points)
     })
   }
 

@@ -38,3 +38,8 @@ export const addShape = createAction(
   `[${segmentatorFeatureKey}] Add Shape`,
   props<{ image: ImageData; shapeType: string; points: number[][] }>()
 )
+
+export const removeShape = createAction(
+  `[${segmentatorFeatureKey}] Remove Shape`,
+  props<{ image: ImageData }>()
+)

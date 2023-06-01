@@ -11,5 +11,10 @@ export interface Tool {
     store: Store<SegmentatorState>,
     points: number[][]
   ) => void
-  undo: (image: ImageData, store: Store<SegmentatorState>) => void
+  undo: (
+    canvas: HTMLCanvasElement,
+    image: ImageData,
+    store: Store<SegmentatorState>,
+    points: number[][]
+  ) => void
 }

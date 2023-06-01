@@ -5,6 +5,7 @@ import {
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
+  removeShape,
   selectImage,
   toggleTool
 } from './segmentator.actions'
@@ -37,5 +38,11 @@ export const segmentatorReducer = createReducer(
     return state.images === updatedImages
       ? state
       : { ...state, images: updatedImages }
+  }),
+  on(removeShape, (state, { image }) => {
+    const updatedImages = state.images.map(img =>
+      img === image ? { ...img, shapes: image.shapes.slice(0, -1) } : img
+    )
+    return { ...state, images: updatedImages }
   })
 )
