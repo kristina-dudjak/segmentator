@@ -1,7 +1,23 @@
 import { createAction, props } from '@ngrx/store'
-import { User } from '../../../shared/models/User'
+import { User } from '../models/User'
 
 export const authFeatureKey = 'Auth'
+
+export const getUserRequest = createAction(
+  `[${authFeatureKey}] Get User Request`
+)
+
+export const getUserSuccess = createAction(
+  `[${authFeatureKey}] Get User Success`,
+  props<{
+    user: User
+  }>()
+)
+
+export const getUserFailure = createAction(
+  `[${authFeatureKey}] Get User Failure`,
+  props<{ error: string }>()
+)
 
 export const loginRequest = createAction(
   `[${authFeatureKey}] Login Request`,

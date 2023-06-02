@@ -1,5 +1,8 @@
 import { createReducer, on } from '@ngrx/store'
 import {
+  getUserFailure,
+  getUserRequest,
+  getUserSuccess,
   googleLoginFailure,
   googleLoginRequest,
   googleLoginSuccess,
@@ -17,38 +20,11 @@ import { initialState } from './auth.state'
 
 export const authReducer = createReducer(
   initialState,
-  on(registerRequest, state => ({ ...state, loading: true })),
-  on(registerSuccess, (state, { user }) => ({
-    ...state,
-    loading: false,
-    user: user
-  })),
-  on(registerFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error: error
-  })),
-  on(loginRequest, state => ({
-    ...state,
-    loading: true
-  })),
-  on(loginSuccess, (state, { user }) => ({
-    ...state,
-    loading: false,
-    user: user
-  })),
-  on(loginFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error: error
-  })),
   on(googleLoginRequest, state => ({
-    ...state,
-    loading: true
+    ...state
   })),
   on(googleLoginSuccess, (state, { user }) => ({
     ...state,
-    loading: false,
     user: user
   })),
   on(googleLoginFailure, (state, { error }) => ({
@@ -56,17 +32,44 @@ export const authReducer = createReducer(
     loading: false,
     error: error
   })),
-  on(signOutRequest, state => ({
+  on(getUserRequest, state => ({ ...state })),
+  on(getUserSuccess, (state, { user }) => ({
     ...state,
-    loading: true
+    user: user
+  })),
+  on(getUserFailure, (state, { error }) => ({
+    ...state,
+    error: error
+  })),
+  on(registerRequest, state => ({ ...state })),
+  on(registerSuccess, (state, { user }) => ({
+    ...state,
+    user: user
+  })),
+  on(registerFailure, (state, { error }) => ({
+    ...state,
+    error: error
+  })),
+  on(loginRequest, state => ({
+    ...state
+  })),
+  on(loginSuccess, (state, { user }) => ({
+    ...state,
+    user: user
+  })),
+  on(loginFailure, (state, { error }) => ({
+    ...state,
+    error: error
+  })),
+  on(signOutRequest, state => ({
+    ...state
   })),
   on(signOutSuccess, state => ({
     ...state,
-    loading: false
+    user: null
   })),
   on(signOutFailure, (state, { error }) => ({
     ...state,
-    loading: false,
     error: error
   }))
 )

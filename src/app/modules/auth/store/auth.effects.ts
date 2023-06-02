@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { mergeMap } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap } from 'rxjs'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import {
+  getUserFailure,
+  getUserRequest,
+  getUserSuccess,
   googleLoginFailure,
   googleLoginRequest,
   googleLoginSuccess,
@@ -17,6 +20,7 @@ import {
   signOutRequest,
   signOutSuccess
 } from './auth.actions'
+import { User } from '../models/User'
 
 @Injectable()
 export class AuthEffects {
@@ -26,71 +30,93 @@ export class AuthEffects {
     private router: Router
   ) {}
 
+  getUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getUserRequest),
+      mergeMap(() =>
+        this.authService.getUser().pipe(
+          map(user => {
+            const userModel: User = {
+              uid: user.uid,
+              email: user.email
+            }
+            return getUserSuccess({ user: userModel })
+          }),
+          catchError(error => of(getUserFailure(error)))
+        )
+      )
+    )
+  )
+
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(registerRequest),
-      mergeMap(async ({ credentials: { email, password } }) => {
-        return await this.authService
-          .register(email, password)
-          .then(user => {
+      mergeMap(({ credentials: { email, password } }) =>
+        this.authService.register(email, password).pipe(
+          map(user => {
+            const userModel: User = {
+              uid: user.uid,
+              email: user.email
+            }
             this.router.navigateByUrl('/segmentator')
-            return registerSuccess({ user: user })
-          })
-          .catch(error => {
-            return registerFailure(error)
-          })
-      })
+            return registerSuccess({ user: userModel })
+          }),
+          catchError(error => of(registerFailure(error)))
+        )
+      )
+    )
+  )
+
+  googleLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(googleLoginRequest),
+      switchMap(() =>
+        this.authService.googleLogIn().pipe(
+          map(user => {
+            const userModel: User = {
+              uid: user.uid,
+              email: user.email
+            }
+            this.router.navigateByUrl('/segmentator')
+            return googleLoginSuccess({ user: userModel })
+          }),
+          catchError(error => of(googleLoginFailure(error)))
+        )
+      )
     )
   )
 
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginRequest),
-      mergeMap(async ({ credentials: { email, password } }) => {
-        return await this.authService
-          .logIn(email, password)
-          .then(user => {
+      mergeMap(({ credentials: { email, password } }) =>
+        this.authService.logIn(email, password).pipe(
+          map(user => {
+            const userModel: User = {
+              uid: user.uid,
+              email: user.email
+            }
             this.router.navigateByUrl('/segmentator')
-            return loginSuccess({ user: user })
-          })
-          .catch(error => {
-            return loginFailure(error)
-          })
-      })
+            return loginSuccess({ user: userModel })
+          }),
+          catchError(error => of(loginFailure(error)))
+        )
+      )
     )
   )
 
-  public signout$ = createEffect(() => {
-    return this.actions$.pipe(
+  signout$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(signOutRequest),
-      mergeMap(async () => {
-        return this.authService
-          .signOut()
-          .then(() => {
+      mergeMap(() =>
+        this.authService.signOut().pipe(
+          map(() => {
             this.router.navigateByUrl('/login')
             return signOutSuccess()
-          })
-          .catch(e => {
-            return signOutFailure({ error: e })
-          })
-      })
-    )
-  })
-
-  googleLogin$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(googleLoginRequest),
-      mergeMap(async () => {
-        return await this.authService
-          .googleLogIn()
-          .then(user => {
-            this.router.navigateByUrl('/segmentator')
-            return googleLoginSuccess({ user: user })
-          })
-          .catch(error => {
-            return googleLoginFailure(error)
-          })
-      })
+          }),
+          catchError(error => of(signOutFailure(error)))
+        )
+      )
     )
   )
 }

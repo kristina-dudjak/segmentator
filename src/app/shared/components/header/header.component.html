@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header" *ngIf="user$ | async">
   <button class="header__exit" mat-icon-button (click)="logout()">
     <mat-icon class="header__exit__icon">exit_to_app</mat-icon>
   </button>

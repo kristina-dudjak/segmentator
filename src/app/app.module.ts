@@ -14,6 +14,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FIREBASE_OPTIONS } from '@angular/fire/compat'
 import { SharedModule } from './shared/shared.module'
+import { authFeatureKey } from './modules/auth/store/auth.actions'
+import { authReducer } from './modules/auth/store/auth.reducer'
+import { AuthEffects } from './modules/auth/store/auth.effects'
+import { SegmentatorEffects } from './modules/segmentator/store/segmentator.effects'
+import { segmentatorFeatureKey } from './modules/segmentator/store/segmentator.actions'
+import { segmentatorReducer } from './modules/segmentator/store/segmentator.reducer'
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -30,7 +36,11 @@ import { SharedModule } from './shared/shared.module'
       maxAge: 25,
       logOnly: environment.production
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    StoreModule.forFeature(authFeatureKey, authReducer),
+    EffectsModule.forFeature([AuthEffects]),
+    EffectsModule.forFeature([SegmentatorEffects]),
+    StoreModule.forFeature(segmentatorFeatureKey, segmentatorReducer)
   ],
   providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
   bootstrap: [AppComponent]

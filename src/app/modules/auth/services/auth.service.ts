@@ -1,47 +1,65 @@
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import * as firebase from 'firebase/compat/app'
+import { from, map, of, switchMap } from 'rxjs'
+import firebase from 'firebase/compat/app'
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   constructor (private fbAuth: AngularFireAuth, private db: AngularFirestore) {}
 
-  async register (email: string, password: string) {
-    await this.fbAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then(async ({ user }) => {
-        await this.db
-          .collection('users')
-          .doc(user.uid)
-          .set({ email: email }, { merge: true })
+  getUser () {
+    return this.fbAuth.authState
+  }
+
+  register (email: string, password: string) {
+    return from(
+      this.fbAuth.createUserWithEmailAndPassword(email, password)
+    ).pipe(
+      switchMap(({ user }) => {
+        return from(
+          this.db
+            .collection('users')
+            .doc(user.uid)
+            .set({ email }, { merge: true })
+        ).pipe(map(() => user))
       })
-    return (await this.fbAuth.getRedirectResult()).user
+    )
   }
 
-  async logIn (email: string, password: string) {
-    await this.fbAuth.signInWithEmailAndPassword(email, password)
-    return (await this.fbAuth.getRedirectResult()).user
+  logIn (email: string, password: string) {
+    return from(this.fbAuth.signInWithEmailAndPassword(email, password)).pipe(
+      map(({ user }) => user)
+    )
   }
 
-  async googleLogIn () {
-    await this.fbAuth
-      .signInWithPopup(new firebase.default.auth.GoogleAuthProvider())
-      .then(async ({ user }) => {
+  googleLogIn () {
+    return from(
+      this.fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    ).pipe(
+      switchMap(({ user }) => {
         const ref = this.db.collection(`users`).doc(user.uid).ref
-        if ((await ref.get()).exists) return
-        ref.set(
-          {
-            email: user.email
-          },
-          { merge: true }
+        return from(ref.get()).pipe(
+          switchMap(snapshot => {
+            if (!snapshot.exists) {
+              return from(
+                ref.set(
+                  {
+                    email: user.email
+                  },
+                  { merge: true }
+                )
+              ).pipe(map(() => user))
+            }
+            return of(user)
+          })
         )
       })
-    return (await this.fbAuth.getRedirectResult()).user
+    )
   }
 
-  async signOut () {
-    await this.fbAuth.signOut()
+  signOut () {
+    return from(this.fbAuth.signOut())
   }
 }
