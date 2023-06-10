@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store'
 import { Tool } from '../models/Tool'
 import { ImageData } from './segmentator.state'
+import { User } from '../../auth/models/User'
 
 export const segmentatorFeatureKey = 'segmentator'
 
@@ -42,4 +43,22 @@ export const addShape = createAction(
 export const removeShape = createAction(
   `[${segmentatorFeatureKey}] Remove Shape`,
   props<{ image: ImageData }>()
+)
+
+export const saveImageRequest = createAction(
+  `[${segmentatorFeatureKey}] saveImage Request`,
+  props<{
+    user: User
+    original: string
+    marked: string
+  }>()
+)
+
+export const saveImageSuccess = createAction(
+  `[${segmentatorFeatureKey}] saveImage Success`
+)
+
+export const saveImageFailure = createAction(
+  `[${segmentatorFeatureKey}] saveImage Failure`,
+  props<{ error: string }>()
 )

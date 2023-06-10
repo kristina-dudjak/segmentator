@@ -6,3 +6,4 @@
   (mouseup)="onMouseUp($event)"
   [ngStyle]="{ 'background-image': 'url(' + image.url + ')' }"
 ></canvas>
+<button *ngIf="user$ | async as user" (click)="save(user)">Save</button>

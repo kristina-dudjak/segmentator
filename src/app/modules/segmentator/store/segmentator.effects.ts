@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, concatMap, of } from 'rxjs'
+import { catchError, concatMap, map, of } from 'rxjs'
 import { DbService } from '../services/db.service'
 import {
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
+  saveImageFailure,
+  saveImageRequest,
+  saveImageSuccess,
   selectImage
 } from './segmentator.actions'
 
@@ -32,6 +35,18 @@ export class SegmentatorEffects {
           catchError(error => of(getImagesFailure(error)))
         )
       )
+    )
+  )
+
+  saveImage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(saveImageRequest),
+      concatMap(({ user, original, marked }) => {
+        return this.dbService
+          .saveImage(user, original, marked)
+          .pipe(map(() => saveImageSuccess()))
+      }),
+      catchError(error => of(saveImageFailure(error)))
     )
   )
 }

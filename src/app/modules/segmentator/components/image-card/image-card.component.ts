@@ -11,6 +11,10 @@ import { Tool } from '../../models/Tool'
 import { ImageData, SegmentatorState } from '../../store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { RectTool } from '../../services/rect-tool.service'
+import { AuthState } from 'src/app/modules/auth/store/auth.state'
+import { getUser } from 'src/app/modules/auth/store/auth.selectors'
+import { User } from 'src/app/modules/auth/models/User'
+import { saveImageRequest } from '../../store/segmentator.actions'
 
 @Component({
   selector: 'app-image-card',
@@ -24,8 +28,20 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
   private canvas: HTMLCanvasElement
   private points: number[][] = []
   private isDrawing = false
+  user$ = this.authStore.select(getUser)
 
-  constructor (private store: Store<SegmentatorState>) {}
+  constructor (
+    private store: Store<SegmentatorState>,
+    private authStore: Store<AuthState>
+  ) {}
+
+  save (user: User) {
+    var img = new Image()
+    img.src = this.canvas.toDataURL()
+    this.store.dispatch(
+      saveImageRequest({ user, original: this.image.url, marked: img.src })
+    )
+  }
 
   onMouseDown (event: MouseEvent) {
     this.isDrawing = true
