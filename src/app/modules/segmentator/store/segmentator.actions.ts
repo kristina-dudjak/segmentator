@@ -31,7 +31,7 @@ export const getImagesFailure = createAction(
 export const selectImage = createAction(
   `[${segmentatorFeatureKey}] Select Image`,
   props<{
-    selectedImage: string
+    selectedImage: ImageData
   }>()
 )
 
@@ -42,7 +42,12 @@ export const addShape = createAction(
 
 export const removeShape = createAction(
   `[${segmentatorFeatureKey}] Remove Shape`,
-  props<{ image: ImageData }>()
+  props<{ image: ImageData; index: number }>()
+)
+
+export const replaceShape = createAction(
+  `[${segmentatorFeatureKey}] Replace Shape`,
+  props<{ image: ImageData; shapeType: string; points: number[][] }>()
 )
 
 export const saveImageRequest = createAction(

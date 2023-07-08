@@ -23,7 +23,7 @@ export class SegmentatorEffects {
         this.dbService.getImages().pipe(
           concatMap((imageUrls: string[]) => {
             return [
-              selectImage({ selectedImage: imageUrls[0] }),
+              selectImage({ selectedImage: { url: imageUrls[0], shapes: [] } }),
               getImagesSuccess({
                 images: imageUrls.map(url => ({
                   url: url,

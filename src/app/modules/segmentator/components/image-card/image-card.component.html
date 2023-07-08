@@ -1,9 +1,10 @@
-<canvas
-  class="canvas"
-  #canvas
+<svg
+  class="svg"
+  #svg
+  id="svg"
   (mousedown)="onMouseDown($event)"
   (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp($event)"
   [ngStyle]="{ 'background-image': 'url(' + image.url + ')' }"
-></canvas>
+></svg>
 <button *ngIf="user$ | async as user" (click)="save(user)">Save</button>

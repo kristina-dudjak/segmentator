@@ -14,7 +14,7 @@ export class SidebarComponent {
   selectedImage$ = this.store.select(getImage)
   constructor (private store: Store<SegmentatorState>) {}
 
-  change (selectedImage: string) {
+  change (selectedImage: ImageData) {
     this.store.dispatch(selectImage({ selectedImage }))
   }
 }

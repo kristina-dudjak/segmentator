@@ -10,11 +10,10 @@ import {
 import { Tool } from '../../models/Tool'
 import { ImageData, SegmentatorState } from '../../store/segmentator.state'
 import { Store } from '@ngrx/store'
-import { RectTool } from '../../services/rect-tool.service'
 import { AuthState } from 'src/app/modules/auth/store/auth.state'
 import { getUser } from 'src/app/modules/auth/store/auth.selectors'
 import { User } from 'src/app/modules/auth/models/User'
-import { saveImageRequest } from '../../store/segmentator.actions'
+import { PolygonTool } from '../../services/polygon-tool.service'
 
 @Component({
   selector: 'app-image-card',
@@ -22,12 +21,10 @@ import { saveImageRequest } from '../../store/segmentator.actions'
   styleUrls: ['./image-card.component.scss']
 })
 export class ImageCardComponent implements OnChanges, AfterViewInit {
-  @ViewChild('canvas') canvasRef!: ElementRef
+  @ViewChild('svg') svgRef: ElementRef<SVGElement>
   @Input() tool: Tool
   @Input() image: ImageData
-  private canvas: HTMLCanvasElement
   private points: number[][] = []
-  private isDrawing = false
   user$ = this.authStore.select(getUser)
 
   constructor (
@@ -35,51 +32,94 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
     private authStore: Store<AuthState>
   ) {}
 
-  save (user: User) {
-    var img = new Image()
-    img.src = this.canvas.toDataURL()
-    this.store.dispatch(
-      saveImageRequest({ user, original: this.image.url, marked: img.src })
+  onMouseDown (event: MouseEvent) {
+    this.tool.onMouseDown?.(
+      event,
+      this.svgRef.nativeElement,
+      this.image,
+      this.store,
+      this.points
     )
   }
 
-  onMouseDown (event: MouseEvent) {
-    this.isDrawing = true
-    this.tool.draw(event, this.canvas, this.image, this.store, this.points)
-  }
-
   onMouseMove (event: MouseEvent) {
-    if (this.isDrawing) {
-      this.tool.draw(event, this.canvas, this.image, this.store, this.points)
-    }
+    this.tool.onMouseMove?.(event, this.svgRef.nativeElement, this.points)
   }
 
   onMouseUp (event: MouseEvent) {
-    this.isDrawing = false
-    if (this.tool instanceof RectTool) {
-      this.tool.draw(event, this.canvas, this.image, this.store, this.points)
-    }
+    this.tool.onMouseUp?.(
+      event,
+      this.svgRef.nativeElement,
+      this.image,
+      this.store,
+      this.points
+    )
   }
 
   ngAfterViewInit () {
-    this.canvas = this.canvasRef.nativeElement
+    const svg = this.svgRef.nativeElement
     const img = new Image()
     img.src = this.image.url
-    img.addEventListener('load', () => {
-      this.canvas.width = img.width
-      this.canvas.height = img.height
-      this.tool.update(this.canvas, this.image)
-    })
 
-    document.addEventListener('keydown', event => {
-      this.tool.undo(this.canvas, this.image, this.store, this.points)
+    img.addEventListener('load', () => {
+      const svgRect = svg.getBoundingClientRect()
+      const aspectRatio = img.width / img.height
+      const width = svgRect.width
+      const height = width / aspectRatio
+
+      svg.setAttribute('width', `${width}`)
+      svg.setAttribute('height', `${height}`)
+      this.tool.update(this.svgRef.nativeElement, this.image)
     })
   }
 
-  ngOnChanges (change: SimpleChanges) {
-    if (this.canvas) {
-      this.tool.update(this.canvas, this.image)
+  ngOnChanges (changes: SimpleChanges) {
+    const toolChange = changes['tool']
+    if (this.tool instanceof PolygonTool && !toolChange) {
+      this.points = [...this.points]
+    } else {
       this.points = []
     }
+    if (
+      toolChange?.currentValue &&
+      toolChange?.currentValue !== toolChange?.previousValue
+    ) {
+      if (this.svgRef) {
+        this.tool.update(this.svgRef.nativeElement, this.image)
+      }
+    }
+  }
+
+  save (user: User) {
+    // var img = new Image()
+    // img.src = this.canvas.toDataURL()
+    // this.store.dispatch(
+    //   saveImageRequest({ user, original: this.image.url, marked: img.src })
+    // )
+
+    const svgElement = document.getElementById('svg')
+    const serializer = new XMLSerializer()
+    const svgString = serializer.serializeToString(svgElement)
+
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml' })
+    const svgURL = URL.createObjectURL(svgBlob)
+
+    const imgg = new Image()
+
+    imgg.onload = function () {
+      const canvas = document.createElement('canvas')
+      canvas.width = imgg.width
+      canvas.height = imgg.height
+
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(imgg, 0, 0)
+
+      const dataUrl = canvas.toDataURL()
+      console.log(dataUrl)
+
+      URL.revokeObjectURL(svgURL)
+    }
+    imgg.src = svgURL
+    console.log(imgg.src)
   }
 }

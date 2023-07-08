@@ -8,14 +8,17 @@
     <ng-container *ngFor="let image of images; trackBy: trackByUrl">
       <app-image-card
         class="main__image"
-        *ngIf="images.length !== 0 && image.url == (image$ | async)"
+        *ngIf="images.length !== 0 && image.url == (image$ | async).url"
         [tool]="selectedTool"
         [image]="image"
       ></app-image-card>
     </ng-container>
     <app-toolbar
       class="main__toolbar"
+      *ngIf="images.length !== 0"
       [selectedTool]="selectedTool"
+      [images]="images"
+      [image]="image$ | async"
     ></app-toolbar>
   </ng-container>
 </main>

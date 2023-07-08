@@ -4,7 +4,7 @@ import { LineTool } from '../services/line-tool.service'
 export interface SegmentatorState {
   tool: Tool
   images: ImageData[]
-  selectedImage: string //change to url
+  selectedImage: ImageData //change to url
 }
 
 export interface ImageData {
