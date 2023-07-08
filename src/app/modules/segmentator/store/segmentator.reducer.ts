@@ -6,6 +6,7 @@ import {
   getImagesRequest,
   getImagesSuccess,
   removeShape,
+  replaceShape,
   saveImageFailure,
   saveImageRequest,
   saveImageSuccess,
@@ -42,10 +43,36 @@ export const segmentatorReducer = createReducer(
       ? state
       : { ...state, images: updatedImages }
   }),
-  on(removeShape, (state, { image }) => {
-    const updatedImages = state.images.map(img =>
-      img === image ? { ...img, shapes: image.shapes.slice(0, -1) } : img
-    )
+  on(removeShape, (state, { image, index }) => {
+    const updatedImages = state.images.map(img => {
+      if (img === image) {
+        const updatedShapes = [
+          ...img.shapes.slice(0, index),
+          ...img.shapes.slice(index + 1)
+        ]
+        return {
+          ...img,
+          shapes: updatedShapes
+        }
+      }
+      return img
+    })
+    return {
+      ...state,
+      images: updatedImages
+    }
+  }),
+  on(replaceShape, (state, { image, shapeType, points }) => {
+    const updatedImages = state.images.map(img => {
+      if (img === image && img.shapes.length > 0) {
+        const updatedShapes = [...img.shapes]
+        updatedShapes[img.shapes.length - 1] = { shapeType, points }
+        return { ...img, shapes: updatedShapes }
+      } else {
+        return img
+      }
+    })
+
     return { ...state, images: updatedImages }
   }),
   on(saveImageRequest, state => ({ ...state })),
