@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import * as d3 from 'd3'
-import { Tool } from '../models/Tool'
+import { Tool } from '../../annotator/models/Tool'
 import { ImageData, SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { addShape } from '../store/segmentator.actions'

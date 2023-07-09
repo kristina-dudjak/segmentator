@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store'
-import { Tool } from '../models/Tool'
+import { Tool } from '../../annotator/models/Tool'
 import { ImageData } from './segmentator.state'
 import { User } from '../../auth/models/User'
 

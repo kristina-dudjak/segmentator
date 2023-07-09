@@ -17,9 +17,9 @@ import { SharedModule } from './shared/shared.module'
 import { authFeatureKey } from './modules/auth/store/auth.actions'
 import { authReducer } from './modules/auth/store/auth.reducer'
 import { AuthEffects } from './modules/auth/store/auth.effects'
-import { SegmentatorEffects } from './modules/segmentator/store/segmentator.effects'
-import { segmentatorFeatureKey } from './modules/segmentator/store/segmentator.actions'
-import { segmentatorReducer } from './modules/segmentator/store/segmentator.reducer'
+import { SegmentatorEffects } from './modules/annotator/store/segmentator.effects'
+import { segmentatorFeatureKey } from './modules/annotator/store/segmentator.actions'
+import { segmentatorReducer } from './modules/annotator/store/segmentator.reducer'
 @NgModule({
   declarations: [AppComponent],
   imports: [

@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/compat/auth-guard'
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login'])
-const redirectLoggedInToSegmentator = () => redirectLoggedInTo(['segmentator'])
+const redirectLoggedInToHome = () => redirectLoggedInTo(['home'])
 
 const routes: Routes = [
   {
@@ -19,13 +19,13 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./modules/auth/auth.module').then(m => m.AuthModule),
-    ...canActivate(redirectLoggedInToSegmentator)
+    ...canActivate(redirectLoggedInToHome)
   },
   {
-    path: 'segmentator',
+    path: 'home',
     loadChildren: () =>
-      import('./modules/segmentator/segmentator.module').then(
-        m => m.SegmentatorModule
+      import('./modules/annotator/annotator.module').then(
+        m => m.AnnotatorModule
       ),
     ...canActivate(redirectUnauthorizedToLogin)
   }

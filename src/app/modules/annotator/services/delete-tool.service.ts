@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Tool } from '../models/Tool'
+import { Tool } from '../../annotator/models/Tool'
 import { Store } from '@ngrx/store'
 import { ImageData, SegmentatorState } from '../store/segmentator.state'
 import * as d3 from 'd3'

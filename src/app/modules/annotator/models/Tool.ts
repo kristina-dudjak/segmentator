@@ -1,5 +1,8 @@
 import { Store } from '@ngrx/store'
-import { ImageData, SegmentatorState } from '../store/segmentator.state'
+import {
+  ImageData,
+  SegmentatorState
+} from '../../annotator/store/segmentator.state'
 import * as d3 from 'd3'
 export abstract class Tool {
   abstract icon: string

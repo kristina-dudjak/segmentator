@@ -1,0 +1,27 @@
+.main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  place-items: center;
+  margin: 4px;
+  height: calc(100vh - 68px);
+  text-align: center;
+  gap: 4px;
+
+  &__new {
+    grid-column: 1 / 4;
+    display: flex;
+    align-items: center;
+  }
+
+  &__review {
+    grid-column: 4 / 9;
+    display: flex;
+    align-items: center;
+  }
+
+  &__upload {
+    grid-column: 9 / 13;
+    display: flex;
+    align-items: center;
+  }
+}

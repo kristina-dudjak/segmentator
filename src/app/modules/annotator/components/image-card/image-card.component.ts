@@ -8,12 +8,15 @@ import {
   ViewChild
 } from '@angular/core'
 import { Tool } from '../../models/Tool'
-import { ImageData, SegmentatorState } from '../../store/segmentator.state'
+import {
+  ImageData,
+  SegmentatorState
+} from '../../../annotator/store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { AuthState } from 'src/app/modules/auth/store/auth.state'
 import { getUser } from 'src/app/modules/auth/store/auth.selectors'
 import { User } from 'src/app/modules/auth/models/User'
-import { PolygonTool } from '../../services/polygon-tool.service'
+import { PolygonTool } from '../../../annotator/services/polygon-tool.service'
 
 @Component({
   selector: 'app-image-card',

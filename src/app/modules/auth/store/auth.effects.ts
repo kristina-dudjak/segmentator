@@ -58,7 +58,7 @@ export class AuthEffects {
               uid: user.uid,
               email: user.email
             }
-            this.router.navigateByUrl('/segmentator')
+            this.router.navigateByUrl('/home')
             return registerSuccess({ user: userModel })
           }),
           catchError(error => of(registerFailure(error)))
@@ -77,7 +77,7 @@ export class AuthEffects {
               uid: user.uid,
               email: user.email
             }
-            this.router.navigateByUrl('/segmentator')
+            this.router.navigateByUrl('/home')
             return googleLoginSuccess({ user: userModel })
           }),
           catchError(error => of(googleLoginFailure(error)))
@@ -96,7 +96,7 @@ export class AuthEffects {
               uid: user.uid,
               email: user.email
             }
-            this.router.navigateByUrl('/segmentator')
+            this.router.navigateByUrl('/home')
             return loginSuccess({ user: userModel })
           }),
           catchError(error => of(loginFailure(error)))

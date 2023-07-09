@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { SegmentatorComponent } from './views/segmentator/segmentator.component'
+import { HomeComponent } from './views/home/home.component'
 
 const routes: Routes = [
   {
     path: '',
-    component: SegmentatorComponent
+    component: HomeComponent
   }
 ]
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SegmentatorRoutingModule {}
+export class AnnotatorRoutingModule {}

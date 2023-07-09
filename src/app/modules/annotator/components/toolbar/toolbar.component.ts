@@ -1,12 +1,18 @@
 import { Component, Input } from '@angular/core'
 import { Tool } from '../../models/Tool'
 import { Store } from '@ngrx/store'
-import { ImageData, SegmentatorState } from '../../store/segmentator.state'
-import { removeShape, toggleTool } from '../../store/segmentator.actions'
-import { LineTool } from '../../services/line-tool.service'
-import { RectTool } from '../../services/rect-tool.service'
-import { PolygonTool } from '../../services/polygon-tool.service'
-import { DeleteTool } from '../../services/delete-tool.service'
+import {
+  ImageData,
+  SegmentatorState
+} from '../../../annotator/store/segmentator.state'
+import {
+  removeShape,
+  toggleTool
+} from '../../../annotator/store/segmentator.actions'
+import { LineTool } from '../../../annotator/services/line-tool.service'
+import { RectTool } from '../../../annotator/services/rect-tool.service'
+import { PolygonTool } from '../../../annotator/services/polygon-tool.service'
+import { DeleteTool } from '../../../annotator/services/delete-tool.service'
 
 @Component({
   selector: 'app-toolbar',

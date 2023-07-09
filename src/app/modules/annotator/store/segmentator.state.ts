@@ -1,4 +1,4 @@
-import { Tool } from '../models/Tool'
+import { Tool } from '../../annotator/models/Tool'
 import { LineTool } from '../services/line-tool.service'
 
 export interface SegmentatorState {
