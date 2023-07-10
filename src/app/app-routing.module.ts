@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/compat/auth-guard'
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login'])
-const redirectLoggedInToHome = () => redirectLoggedInTo(['home'])
+const redirectLoggedInToHome = () => redirectLoggedInTo(['annotator'])
 
 const routes: Routes = [
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
     ...canActivate(redirectLoggedInToHome)
   },
   {
-    path: 'home',
+    path: 'annotator',
     loadChildren: () =>
       import('./modules/annotator/annotator.module').then(
         m => m.AnnotatorModule

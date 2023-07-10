@@ -14,7 +14,12 @@ export interface ImageData {
 
 export interface Shape {
   shapeType: string
-  points: number[][]
+  points: Point[]
+}
+
+export interface Point {
+  x: number
+  y: number
 }
 
 export const initialState: SegmentatorState = {

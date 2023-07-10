@@ -1,6 +1,7 @@
 import { Store } from '@ngrx/store'
 import {
   ImageData,
+  Point,
   SegmentatorState
 } from '../../annotator/store/segmentator.state'
 import * as d3 from 'd3'
@@ -12,7 +13,12 @@ export abstract class Tool {
       if (image.shapes[i].shapeType === 'poly') {
         d3.select(canvas)
           .append('polygon')
-          .attr('points', image.shapes[i].points.join(' '))
+          .attr(
+            'points',
+            image.shapes[i].points
+              .map(point => `${point.x},${point.y}`)
+              .join(' ')
+          )
           .attr('fill', 'red')
           .attr('class', `shape${i}`)
           .attr('stroke', 'red')
@@ -20,16 +26,21 @@ export abstract class Tool {
       } else if (image.shapes[i].shapeType === 'line') {
         d3.select(canvas)
           .append('polyline')
-          .attr('points', image.shapes[i].points.join(' '))
+          .attr(
+            'points',
+            image.shapes[i].points
+              .map(point => `${point.x},${point.y}`)
+              .join(' ')
+          )
           .attr('fill', 'red')
           .attr('class', `shape${i}`)
           .attr('stroke', 'red')
           .attr('stroke-width', '3')
       } else if (image.shapes[i].shapeType === 'rect') {
-        let startX = image.shapes[i].points[0][0]
-        let startY = image.shapes[i].points[0][1]
-        let endX = image.shapes[i].points[1][0]
-        let endY = image.shapes[i].points[1][1]
+        let startX = image.shapes[i].points[0].x
+        let startY = image.shapes[i].points[0].y
+        let endX = image.shapes[i].points[1].x
+        let endY = image.shapes[i].points[1].y
 
         if (startX > endX) {
           ;[startX, endX] = [endX, startX]
@@ -56,14 +67,14 @@ export abstract class Tool {
     canvas: SVGElement,
     image: ImageData,
     store: Store<SegmentatorState>,
-    points: number[][]
+    points: Point[]
   ): void
-  onMouseMove?(event: MouseEvent, canvas: SVGElement, points: number[][]): void
+  onMouseMove?(event: MouseEvent, canvas: SVGElement, points: Point[]): void
   onMouseUp?(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,
     store: Store<SegmentatorState>,
-    points: number[][]
+    points: Point[]
   ): void
 }

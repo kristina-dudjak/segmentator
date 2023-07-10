@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import * as d3 from 'd3'
 import { Tool } from '../../annotator/models/Tool'
-import { ImageData, SegmentatorState } from '../store/segmentator.state'
+import { ImageData, Point, SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { addShape } from '../store/segmentator.actions'
 
@@ -16,19 +16,19 @@ export class LineTool extends Tool {
     canvas: SVGElement,
     image: ImageData,
     store: Store<SegmentatorState>,
-    points: number[][]
+    points: Point[]
   ) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight
     const [x, y] = d3.pointer(event)
-    const point = [x * scaleX, y * scaleY]
+    const point: Point = { x: x * scaleX, y: y * scaleY }
     points.push(point)
 
     d3.select(canvas).selectAll(`.shape${image.shapes.length}`).remove()
     d3.select(canvas)
       .append('polyline')
-      .attr('points', points.join(' '))
+      .attr('points', points.map(point => `${point.x},${point.y}`).join(' '))
       .attr('class', `shape${image.shapes.length}`)
       .attr('fill', 'none')
       .attr('stroke', 'red')
@@ -36,8 +36,8 @@ export class LineTool extends Tool {
 
     const limit = 10
     if (points.length > 2) {
-      let dx = points[0][0] - points[points.length - 1][0]
-      let dy = points[0][1] - points[points.length - 1][1]
+      let dx = points[0].x - points[points.length - 1].x
+      let dy = points[0].y - points[points.length - 1].y
       if (dx < 0) {
         dx *= -1
       }
@@ -48,7 +48,10 @@ export class LineTool extends Tool {
         d3.select(canvas).selectAll(`.shape${image.shapes.length}`).remove()
         d3.select(canvas)
           .append('polyline')
-          .attr('points', points.join(' '))
+          .attr(
+            'points',
+            points.map(point => `${point.x},${point.y}`).join(' ')
+          )
           .attr('class', `shape${image.shapes.length}`)
           .attr('fill', 'red')
         store.dispatch(addShape({ image, shapeType: 'line', points: points }))
@@ -56,16 +59,12 @@ export class LineTool extends Tool {
     }
   }
 
-  override onMouseMove (
-    event: MouseEvent,
-    canvas: SVGElement,
-    points: number[][]
-  ) {
+  override onMouseMove (event: MouseEvent, canvas: SVGElement, points: Point[]) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight
     const [x, y] = d3.pointer(event)
-    const point = [x * scaleX, y * scaleY]
+    const point: Point = { x: x * scaleX, y: y * scaleY }
     const temporaryPoints = [...points, point]
 
     d3.select(canvas).select('.temporary-polyline').remove()
@@ -73,7 +72,10 @@ export class LineTool extends Tool {
       d3.select(canvas)
         .append('polyline')
         .attr('class', 'temporary-polyline')
-        .attr('points', temporaryPoints.join(' '))
+        .attr(
+          'points',
+          temporaryPoints.map(point => `${point.x},${point.y}`).join(' ')
+        )
         .attr('fill', 'none')
         .attr('stroke', 'red')
         .attr('stroke-width', '3')

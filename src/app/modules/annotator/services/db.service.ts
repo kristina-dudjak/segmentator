@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { defaultIfEmpty, from, map } from 'rxjs'
 import { User } from '../../auth/models/User'
+import { ImageData } from '../store/segmentator.state'
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,24 @@ export class DbService {
       )
   }
 
-  saveImage (user: User, originalImage: string, markedImage: string) {
+  getUserImages (user: User) {
+    return this.db
+      .collection('users')
+      .doc(user.uid)
+      .collection('images')
+      .snapshotChanges()
+      .pipe(
+        map(actions =>
+          actions.map(({ payload: { doc } }) => ({
+            url: doc.data()['originalImageURL'],
+            shapes: doc.data()['shapes']
+          }))
+        ),
+        defaultIfEmpty([])
+      )
+  }
+
+  saveImage (user: User, originalImage: ImageData, markedImage: string) {
     const imageRef = this.db
       .collection('users')
       .doc(user.uid)
@@ -30,8 +48,9 @@ export class DbService {
 
     return from(
       imageRef.set({
-        originalImageURL: originalImage,
-        markedImageURL: markedImage
+        originalImageURL: originalImage.url,
+        markedImageURL: markedImage,
+        shapes: originalImage.shapes
       })
     )
   }

@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store'
 import { Tool } from '../../annotator/models/Tool'
-import { ImageData } from './segmentator.state'
+import { ImageData, Point } from './segmentator.state'
 import { User } from '../../auth/models/User'
 
 export const segmentatorFeatureKey = 'segmentator'
@@ -23,6 +23,22 @@ export const getImagesSuccess = createAction(
   }>()
 )
 
+export const getUserImagesFailure = createAction(
+  `[${segmentatorFeatureKey}] getUserImages Failure`,
+  props<{ error: string }>()
+)
+
+export const getUserImagesRequest = createAction(
+  `[${segmentatorFeatureKey}] getUserImages Request`
+)
+
+export const getUserImagesSuccess = createAction(
+  `[${segmentatorFeatureKey}] getUserImages Success`,
+  props<{
+    images: ImageData[]
+  }>()
+)
+
 export const getImagesFailure = createAction(
   `[${segmentatorFeatureKey}] getImages Failure`,
   props<{ error: string }>()
@@ -37,7 +53,7 @@ export const selectImage = createAction(
 
 export const addShape = createAction(
   `[${segmentatorFeatureKey}] Add Shape`,
-  props<{ image: ImageData; shapeType: string; points: number[][] }>()
+  props<{ image: ImageData; shapeType: string; points: Point[] }>()
 )
 
 export const removeShape = createAction(
@@ -47,14 +63,14 @@ export const removeShape = createAction(
 
 export const replaceShape = createAction(
   `[${segmentatorFeatureKey}] Replace Shape`,
-  props<{ image: ImageData; shapeType: string; points: number[][] }>()
+  props<{ image: ImageData; shapeType: string; points: Point[] }>()
 )
 
 export const saveImageRequest = createAction(
   `[${segmentatorFeatureKey}] saveImage Request`,
   props<{
     user: User
-    original: string
+    image: ImageData
     marked: string
   }>()
 )

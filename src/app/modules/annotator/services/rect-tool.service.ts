@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Tool } from '../../annotator/models/Tool'
 import * as d3 from 'd3'
-import { ImageData, SegmentatorState } from '../store/segmentator.state'
+import { ImageData, Point, SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { addShape } from '../store/segmentator.actions'
 @Injectable({
@@ -15,7 +15,7 @@ export class RectTool extends Tool {
     canvas: SVGElement,
     image: ImageData,
     store: Store<SegmentatorState>,
-    points: number[][]
+    points: Point[]
   ) {
     this.draw(event, canvas, image, store, points)
   }
@@ -25,28 +25,24 @@ export class RectTool extends Tool {
     canvas: SVGElement,
     image: ImageData,
     store: Store<SegmentatorState>,
-    points: number[][]
+    points: Point[]
   ) {
     this.draw(event, canvas, image, store, points)
     d3.select(canvas).select('.temporary-rect').remove()
   }
 
-  override onMouseMove (
-    event: MouseEvent,
-    canvas: SVGElement,
-    points: number[][]
-  ) {
+  override onMouseMove (event: MouseEvent, canvas: SVGElement, points: Point[]) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight
     const [x, y] = d3.pointer(event)
-    const point = [x * scaleX, y * scaleY]
+    const point: Point = { x: x * scaleX, y: y * scaleY }
     const temporaryPoints = [...points, point]
     if (temporaryPoints.length >= 2) {
-      let startX = temporaryPoints[0][0]
-      let startY = temporaryPoints[0][1]
-      let endX = temporaryPoints[1][0]
-      let endY = temporaryPoints[1][1]
+      let startX = temporaryPoints[0].x
+      let startY = temporaryPoints[0].y
+      let endX = temporaryPoints[1].x
+      let endY = temporaryPoints[1].y
 
       if (startX > endX) {
         ;[startX, endX] = [endX, startX]
@@ -75,19 +71,19 @@ export class RectTool extends Tool {
     canvas: SVGElement,
     image: ImageData,
     store: Store<SegmentatorState>,
-    points: number[][]
+    points: Point[]
   ) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight
     const [x, y] = d3.pointer(event)
-    const point = [x * scaleX, y * scaleY]
+    const point: Point = { x: x * scaleX, y: y * scaleY }
     points.push(point)
     if (points.length >= 2) {
-      let startX = points[0][0]
-      let startY = points[0][1]
-      let endX = points[1][0]
-      let endY = points[1][1]
+      let startX = points[0].x
+      let startY = points[0].y
+      let endX = points[1].x
+      let endY = points[1].y
 
       if (startX > endX) {
         ;[startX, endX] = [endX, startX]

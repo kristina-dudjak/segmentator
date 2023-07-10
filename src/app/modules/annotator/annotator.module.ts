@@ -12,7 +12,9 @@ import { HomeComponent } from './views/home/home.component'
 import { ImageCardComponent } from './components/image-card/image-card.component'
 import { ToolbarComponent } from './components/toolbar/toolbar.component'
 import { SidebarComponent } from './components/sidebar/sidebar.component'
-import { AnnotatorComponent } from './views/annotator/annotator.component'
+import { AnnotatorComponent } from './views/annotator/annotator.component';
+import { ReviewComponent } from './views/review/review.component';
+import { UploadComponent } from './views/upload/upload.component'
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { AnnotatorComponent } from './views/annotator/annotator.component'
     ImageCardComponent,
     ToolbarComponent,
     SidebarComponent,
-    AnnotatorComponent
+    AnnotatorComponent,
+    ReviewComponent,
+    UploadComponent
   ],
   imports: [
     CommonModule,

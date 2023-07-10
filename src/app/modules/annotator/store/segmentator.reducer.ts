@@ -5,6 +5,9 @@ import {
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
+  getUserImagesFailure,
+  getUserImagesRequest,
+  getUserImagesSuccess,
   removeShape,
   replaceShape,
   saveImageFailure,
@@ -26,6 +29,15 @@ export const segmentatorReducer = createReducer(
     images: images
   })),
   on(getImagesFailure, (state, { error }) => ({
+    ...state,
+    error: error
+  })),
+  on(getUserImagesRequest, state => ({ ...state })),
+  on(getUserImagesSuccess, (state, { images }) => ({
+    ...state,
+    images: images
+  })),
+  on(getUserImagesFailure, (state, { error }) => ({
     ...state,
     error: error
   })),

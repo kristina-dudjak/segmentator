@@ -10,6 +10,7 @@ import {
 import { Tool } from '../../models/Tool'
 import {
   ImageData,
+  Point,
   SegmentatorState
 } from '../../../annotator/store/segmentator.state'
 import { Store } from '@ngrx/store'
@@ -17,6 +18,7 @@ import { AuthState } from 'src/app/modules/auth/store/auth.state'
 import { getUser } from 'src/app/modules/auth/store/auth.selectors'
 import { User } from 'src/app/modules/auth/models/User'
 import { PolygonTool } from '../../../annotator/services/polygon-tool.service'
+import { saveImageRequest } from '../../store/segmentator.actions'
 
 @Component({
   selector: 'app-image-card',
@@ -27,7 +29,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
   @ViewChild('svg') svgRef: ElementRef<SVGElement>
   @Input() tool: Tool
   @Input() image: ImageData
-  private points: number[][] = []
+  private points: Point[] = []
   user$ = this.authStore.select(getUser)
 
   constructor (
@@ -94,35 +96,30 @@ export class ImageCardComponent implements OnChanges, AfterViewInit {
   }
 
   save (user: User) {
-    // var img = new Image()
-    // img.src = this.canvas.toDataURL()
-    // this.store.dispatch(
-    //   saveImageRequest({ user, original: this.image.url, marked: img.src })
-    // )
-
     const svgElement = document.getElementById('svg')
     const serializer = new XMLSerializer()
     const svgString = serializer.serializeToString(svgElement)
-
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml' })
     const svgURL = URL.createObjectURL(svgBlob)
 
-    const imgg = new Image()
-
-    imgg.onload = function () {
-      const canvas = document.createElement('canvas')
-      canvas.width = imgg.width
-      canvas.height = imgg.height
-
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(imgg, 0, 0)
-
-      const dataUrl = canvas.toDataURL()
-      console.log(dataUrl)
-
-      URL.revokeObjectURL(svgURL)
-    }
-    imgg.src = svgURL
-    console.log(imgg.src)
+    const img = new Image()
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const dataUrlPromise = new Promise(resolve => {
+      img.onload = function () {
+        canvas.width = img.width
+        canvas.height = img.height
+        ctx.drawImage(img, 0, 0)
+        const dataUrl = canvas.toDataURL()
+        URL.revokeObjectURL(svgURL)
+        resolve(dataUrl)
+      }
+    })
+    img.src = svgURL
+    dataUrlPromise.then((dataUrl: string) => {
+      this.store.dispatch(
+        saveImageRequest({ user, image: this.image, marked: dataUrl })
+      )
+    })
   }
 }
