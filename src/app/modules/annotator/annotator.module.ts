@@ -11,20 +11,24 @@ import { SegmentatorEffects } from './store/segmentator.effects'
 import { HomeComponent } from './views/home/home.component'
 import { ImageCardComponent } from './components/image-card/image-card.component'
 import { ToolbarComponent } from './components/toolbar/toolbar.component'
-import { SidebarComponent } from './components/sidebar/sidebar.component'
-import { AnnotatorComponent } from './views/annotator/annotator.component';
-import { ReviewComponent } from './views/review/review.component';
+import { AnnotatorComponent } from './views/annotator/annotator.component'
+import { ReviewComponent } from './views/review/review.component'
 import { UploadComponent } from './views/upload/upload.component'
+import { ImageListComponent } from './components/image-list/image-list.component'
+import { ExtractUrlsPipe } from './components/pipes/extract-urls.pipe'
+import { ImagesSidebarComponent } from './components/images-sidebar/images-sidebar.component'
 
 @NgModule({
   declarations: [
     HomeComponent,
     ImageCardComponent,
     ToolbarComponent,
-    SidebarComponent,
+    ImagesSidebarComponent,
     AnnotatorComponent,
     ReviewComponent,
-    UploadComponent
+    UploadComponent,
+    ImageListComponent,
+    ExtractUrlsPipe
   ],
   imports: [
     CommonModule,

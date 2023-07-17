@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { defaultIfEmpty, from, map } from 'rxjs'
+import { defaultIfEmpty, forkJoin, from, map } from 'rxjs'
 import { User } from '../../auth/models/User'
 import { ImageData } from '../store/segmentator.state'
 
@@ -16,9 +16,15 @@ export class DbService {
       .snapshotChanges()
       .pipe(
         map(actions =>
-          actions.map(({ payload: { doc } }) => doc.data()['url'])
-        ),
-        defaultIfEmpty([])
+          actions.map(({ payload: { doc } }) => {
+            const img: ImageData = {
+              id: doc.id,
+              url: doc.data()['url'],
+              shapes: []
+            }
+            return img
+          })
+        )
       )
   }
 
@@ -31,6 +37,7 @@ export class DbService {
       .pipe(
         map(actions =>
           actions.map(({ payload: { doc } }) => ({
+            id: doc.id,
             url: doc.data()['originalImageURL'],
             shapes: doc.data()['shapes']
           }))
@@ -39,12 +46,25 @@ export class DbService {
       )
   }
 
+  removeImage (imageUrl: string) {
+    this.db.collection('images').doc(imageUrl).delete()
+  }
+
+  removeUserImage (user: User, image: ImageData) {
+    this.db
+      .collection('users')
+      .doc(user.uid)
+      .collection('images')
+      .doc(image.id)
+      .delete()
+  }
+
   saveImage (user: User, originalImage: ImageData, markedImage: string) {
     const imageRef = this.db
       .collection('users')
       .doc(user.uid)
       .collection('images')
-      .doc()
+      .doc(originalImage.id)
 
     return from(
       imageRef.set({
@@ -52,6 +72,19 @@ export class DbService {
         markedImageURL: markedImage,
         shapes: originalImage.shapes
       })
+    )
+  }
+
+  uploadImages (images: string[]) {
+    return forkJoin(
+      images.map(image =>
+        from(
+          this.db
+            .collection('images')
+            .doc()
+            .set({ url: image }, { merge: true })
+        )
+      )
     )
   }
 }

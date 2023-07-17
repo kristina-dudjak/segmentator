@@ -1,1 +1,41 @@
-<p>upload works!</p>
+<div class="main">
+  <div class="main__upload">
+    <h2 class="main__upload__title">Click to upload images.</h2>
+    <button
+      mat-mini-fab
+      color="primary"
+      class="upload-btn"
+      (click)="fileUpload.click()"
+    >
+      <mat-icon>attach_file</mat-icon>
+    </button>
+  </div>
+  <app-image-list
+    class="main__list"
+    [urls]="selectedImages"
+    (newItemEvent)="removeImage($event)"
+  ></app-image-list>
+  <button
+    class="main__save"
+    *ngIf="selectedImages.length !== 0"
+    (click)="save()"
+  >
+    Save to db
+  </button>
+  <mat-divider class="main__divider"></mat-divider>
+  <h2 class="main__title">Images from the database</h2>
+  <app-image-list
+    class="main__list"
+    [urls]="images$ | async | extractUrls"
+    (newItemEvent)="removeImageFromDb($event)"
+  ></app-image-list>
+</div>
+
+<input
+  type="file"
+  class="file-input"
+  (change)="onFileSelected($event)"
+  #fileUpload
+  multiple
+  accept="image/*"
+/>

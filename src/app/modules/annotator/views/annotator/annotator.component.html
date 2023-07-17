@@ -1,9 +1,9 @@
 <main class="main" *ngIf="images$ | async as images">
-  <app-sidebar
+  <app-images-sidebar
     class="main__sidebar"
     *ngIf="images.length !== 0"
     [images]="images"
-  ></app-sidebar>
+  ></app-images-sidebar>
   <ng-container *ngIf="selectedTool$ | async as selectedTool">
     <ng-container *ngFor="let image of images; trackBy: trackByUrl">
       <app-image-card

@@ -1,0 +1,32 @@
+.main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  place-items: center;
+  gap: 12px;
+  &__upload,
+  &__divider,
+  &__title,
+  &__save,
+  &__list {
+    grid-column: 2 / 12;
+  }
+
+  &__divider {
+    border: 2px solid gray;
+    width: 100%;
+  }
+
+  &__upload {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &__title {
+      margin: 0;
+    }
+  }
+}
+
+.file-input {
+  display: none;
+}

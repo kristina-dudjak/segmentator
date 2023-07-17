@@ -32,12 +32,19 @@ export class SegmentatorEffects {
       ofType(getImagesRequest),
       concatMap(() =>
         this.dbService.getImages().pipe(
-          concatMap((imageUrls: string[]) => {
+          concatMap((images: ImageData[]) => {
             return [
-              selectImage({ selectedImage: { url: imageUrls[0], shapes: [] } }),
+              selectImage({
+                selectedImage: {
+                  id: images[0].id,
+                  url: images[0].url,
+                  shapes: []
+                }
+              }),
               getImagesSuccess({
-                images: imageUrls.map(url => ({
-                  url: url,
+                images: images.map(image => ({
+                  id: image.id,
+                  url: image.url,
                   shapes: []
                 }))
               })
@@ -57,20 +64,28 @@ export class SegmentatorEffects {
           take(1),
           switchMap(user =>
             this.dbService.getUserImages(user).pipe(
-              concatMap((userImages: ImageData[]) => [
-                selectImage({
-                  selectedImage: {
-                    url: userImages[0].url,
-                    shapes: userImages[0].shapes
-                  }
-                }),
-                getUserImagesSuccess({
-                  images: userImages.map(image => ({
-                    url: image.url,
-                    shapes: image.shapes
-                  }))
-                })
-              ]),
+              concatMap((userImages: ImageData[]) => {
+                if (userImages.length === 0) {
+                  return [getUserImagesSuccess({ images: [] })]
+                } else {
+                  return [
+                    selectImage({
+                      selectedImage: {
+                        id: userImages[0].id,
+                        url: userImages[0].url,
+                        shapes: userImages[0].shapes
+                      }
+                    }),
+                    getUserImagesSuccess({
+                      images: userImages.map(image => ({
+                        id: image.id,
+                        url: image.url,
+                        shapes: image.shapes
+                      }))
+                    })
+                  ]
+                }
+              }),
               catchError(error => of(getUserImagesFailure(error)))
             )
           )

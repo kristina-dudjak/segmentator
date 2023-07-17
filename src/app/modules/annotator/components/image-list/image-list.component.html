@@ -1,0 +1,12 @@
+<ul class="images">
+  <li class="images__item" *ngFor="let url of urls">
+    <div class="images__item__container">
+      <img class="images__item__container__img" [src]="url" />
+      <div class="images__item__overlay">
+        <button class="images__item__overlay__btn" (click)="removeImage(url)">
+          <mat-icon class="images__item__overlay__btn__icon">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </li>
+</ul>

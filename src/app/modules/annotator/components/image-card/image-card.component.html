@@ -1,10 +1,16 @@
 <svg
   class="svg"
-  #svg
   id="svg"
+  #svg
   (mousedown)="onMouseDown($event)"
   (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp($event)"
-  [ngStyle]="{ 'background-image': 'url(' + image.url + ')' }"
+  [style.background-image]="'url(' + image.url + ')'"
 ></svg>
 <button *ngIf="user$ | async as user" (click)="save(user)">Save</button>
+<button
+  *ngIf="route === 'review' && user$ | async as user"
+  (click)="delete(user)"
+>
+  Delete
+</button>
