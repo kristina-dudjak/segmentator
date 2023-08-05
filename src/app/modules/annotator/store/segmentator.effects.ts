@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, concatMap, map, of, switchMap, take } from 'rxjs'
+import {
+  catchError,
+  concatMap,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  take,
+  withLatestFrom
+} from 'rxjs'
 import { DbService } from '../services/db.service'
 import {
   getImagesFailure,
@@ -30,29 +39,40 @@ export class SegmentatorEffects {
   getImages$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getImagesRequest),
-      concatMap(() =>
+      withLatestFrom(this.authStore.select(getUser)),
+      switchMap(([action, user]) =>
         this.dbService.getImages().pipe(
-          concatMap((images: ImageData[]) => {
-            return [
-              selectImage({
-                selectedImage: {
-                  id: images[0].id,
-                  url: images[0].url,
-                  shapes: []
-                }
+          take(1),
+          mergeMap(images =>
+            this.dbService.getUserImages(user).pipe(
+              take(1),
+              map(userImages => {
+                const filteredImages = images
+                  .filter(
+                    image =>
+                      !userImages.some(userImage => userImage.id === image.id)
+                  )
+                  .map(image => ({ image, random: Math.random() }))
+                  .sort((a, b) => a.random - b.random)
+                  .map(({ image }) => image)
+                  .slice(0, 10)
+                return [
+                  selectImage({
+                    selectedImage: filteredImages[0]
+                  }),
+                  getImagesSuccess({
+                    images: filteredImages.map(image => image)
+                  })
+                ]
               }),
-              getImagesSuccess({
-                images: images.map(image => ({
-                  id: image.id,
-                  url: image.url,
-                  shapes: []
-                }))
-              })
-            ]
-          }),
-          catchError(error => of(getImagesFailure(error)))
+              catchError(error =>
+                of(getImagesFailure({ error: error.message }))
+              )
+            )
+          )
         )
-      )
+      ),
+      concatMap(actions => Object.values(actions))
     )
   )
 
@@ -70,18 +90,10 @@ export class SegmentatorEffects {
                 } else {
                   return [
                     selectImage({
-                      selectedImage: {
-                        id: userImages[0].id,
-                        url: userImages[0].url,
-                        shapes: userImages[0].shapes
-                      }
+                      selectedImage: userImages[0]
                     }),
                     getUserImagesSuccess({
-                      images: userImages.map(image => ({
-                        id: image.id,
-                        url: image.url,
-                        shapes: image.shapes
-                      }))
+                      images: userImages.map(image => image)
                     })
                   ]
                 }
