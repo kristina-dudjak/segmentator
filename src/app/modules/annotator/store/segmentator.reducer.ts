@@ -2,12 +2,15 @@ import { createReducer, on } from '@ngrx/store'
 import { initialState } from './segmentator.state'
 import {
   addShape,
+  getImagesBundleRequest,
+  getImagesBundleSuccess,
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
   getUserImagesFailure,
   getUserImagesRequest,
   getUserImagesSuccess,
+  removeImage,
   removeShape,
   replaceShape,
   saveImageFailure,
@@ -32,6 +35,19 @@ export const segmentatorReducer = createReducer(
     ...state,
     error: error
   })),
+  on(getImagesBundleRequest, state => ({ ...state })),
+  on(getImagesBundleSuccess, (state, { images }) => ({
+    ...state,
+    images: images
+  })),
+  on(getImagesFailure, (state, { error }) => ({
+    ...state,
+    error: error
+  })),
+  on(removeImage, (state, { image }) => {
+    const updatedImages = state.images.filter(img => img.id !== image.id)
+    return { ...state, images: updatedImages }
+  }),
   on(getUserImagesRequest, state => ({ ...state })),
   on(getUserImagesSuccess, (state, { images }) => ({
     ...state,

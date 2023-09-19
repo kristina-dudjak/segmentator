@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Tool } from '../../annotator/models/Tool'
 import { Store } from '@ngrx/store'
-import { ImageData, Point, SegmentatorState } from '../store/segmentator.state'
+import { SegmentatorState } from '../store/segmentator.state'
 import * as d3 from 'd3'
 import { addShape, replaceShape } from '../store/segmentator.actions'
+import { Point } from '../models/Point'
+import { ImageData } from '../models/ImageData'
 
 @Injectable({
   providedIn: 'root'
@@ -48,8 +50,8 @@ export class PolygonTool extends Tool {
         .append('polygon')
         .attr('points', points.map(point => `${point.x},${point.y}`).join(' '))
         .attr('class', 'poly')
-        .attr('fill', 'red')
-        .attr('stroke', 'red')
+        .attr('fill', 'rgba(0, 0, 0, 0.5)')
+        .attr('stroke', 'rgba(0, 0, 0, 0.5)')
         .attr('stroke-width', '3')
     }
   }
@@ -72,8 +74,8 @@ export class PolygonTool extends Tool {
           temporaryPoints.map(point => `${point.x},${point.y}`).join(' ')
         )
         .attr('class', 'temporary-polygon')
-        .attr('fill', 'red')
-        .attr('stroke', 'red')
+        .attr('fill', 'rgba(0, 0, 0, 0.5)')
+        .attr('stroke', 'rgba(0, 0, 0, 0.5)')
         .attr('stroke-width', '3')
     } else if (temporaryPoints.length > 1) {
       d3.select(canvas)
@@ -84,7 +86,7 @@ export class PolygonTool extends Tool {
         )
         .attr('class', 'temporary-polygon')
         .attr('fill', 'none')
-        .attr('stroke', 'red')
+        .attr('stroke', 'rgba(0, 0, 0, 0.5)')
         .attr('stroke-width', '3')
     }
   }

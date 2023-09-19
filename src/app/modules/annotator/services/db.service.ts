@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { defaultIfEmpty, forkJoin, from, map } from 'rxjs'
 import { User } from '../../auth/models/User'
-import { ImageData } from '../store/segmentator.state'
+import { ImageData } from '../models/ImageData'
 
 @Injectable({
   providedIn: 'root'

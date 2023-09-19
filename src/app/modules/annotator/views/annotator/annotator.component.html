@@ -4,21 +4,27 @@
     *ngIf="images.length !== 0"
     [images]="images"
   ></app-images-sidebar>
-  <ng-container *ngIf="selectedTool$ | async as selectedTool">
+  <ng-container
+    *ngIf="images.length !== 0 && selectedTool$ | async as selectedTool"
+  >
     <ng-container *ngFor="let image of images; trackBy: trackByUrl">
       <app-image-card
         class="main__image"
-        *ngIf="images.length !== 0 && image.url == (image$ | async).url"
+        *ngIf="image.url == (image$ | async).url"
         [tool]="selectedTool"
         [image]="image"
       ></app-image-card>
     </ng-container>
     <app-toolbar
       class="main__toolbar"
-      *ngIf="images.length !== 0"
       [selectedTool]="selectedTool"
       [images]="images"
       [image]="image$ | async"
     ></app-toolbar>
   </ng-container>
+
+  <div class="main__return" *ngIf="images.length === 0">
+    <p>No more images!</p>
+    <button mat-raised-button [routerLink]="['../']">Return to home</button>
+  </div>
 </main>

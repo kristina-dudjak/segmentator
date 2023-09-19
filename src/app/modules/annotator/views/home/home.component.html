@@ -1,14 +1,23 @@
 <div class="main">
-  <button mat-raised-button class="main__new" [routerLink]="'new'">
-    <p>NEW BUNDLE</p>
+  <button mat-raised-button class="main__btn" [routerLink]="'new'">
+    <h3>NEW BUNDLE</h3>
+    <p class="main__btn__desc">
+      Get a bundle of images to annotate and save them to your collection.
+    </p>
     <mat-icon class="main__new__icon">burst_mode</mat-icon>
   </button>
-  <button mat-raised-button class="main__review" [routerLink]="'review'">
-    <p>REVIEW YOUR IMAGES</p>
+  <button mat-raised-button class="main__btn" [routerLink]="'review'">
+    <h3>REVIEW YOUR IMAGES</h3>
+    <p class="main__btn__desc">
+      Review your annotated images and update them if necessary.
+    </p>
     <mat-icon class="main__review__icon">compare</mat-icon>
   </button>
-  <button mat-raised-button class="main__upload" [routerLink]="'upload'">
-    <p>UPLOAD NEW IMAGES</p>
+  <button mat-raised-button class="main__btn" [routerLink]="'upload'">
+    <h3>UPLOAD NEW IMAGES</h3>
+    <p class="main__btn__desc">
+      Review all images of the model to train and upload more.
+    </p>
     <mat-icon class="main__upload__icon">add_photo_alternate</mat-icon>
   </button>
 </div>

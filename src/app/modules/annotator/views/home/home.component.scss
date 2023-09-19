@@ -1,27 +1,25 @@
+@use '@angular/material' as mat;
+@import '../../../../shared/scss/colors.scss';
+
 .main {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   place-items: center;
-  margin: 4px;
   height: calc(100vh - 68px);
-  text-align: center;
-  gap: 4px;
+  gap: 12px;
 
-  &__new {
-    grid-column: 1 / 4;
-    display: flex;
-    align-items: center;
-  }
+  &__btn {
+    grid-column: 4 / 10;
+    background-color: mat.get-color-from-palette($accent, 100);
+    box-shadow: 0 6px 6px mat.get-color-from-palette($accent, 400);
+    width: 90%;
+    white-space: normal;
+    &:hover {
+      background-color: mat.get-color-from-palette($accent, 300);
+    }
 
-  &__review {
-    grid-column: 4 / 9;
-    display: flex;
-    align-items: center;
-  }
-
-  &__upload {
-    grid-column: 9 / 13;
-    display: flex;
-    align-items: center;
+    @media screen and (max-width: 768px) {
+      grid-column: 1 / 13;
+    }
   }
 }

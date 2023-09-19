@@ -4,12 +4,14 @@ import { Store } from '@ngrx/store'
 import { SegmentatorState } from '../../store/segmentator.state'
 import { getImages } from '../../store/segmentator.selectors'
 import { getImagesRequest } from '../../store/segmentator.actions'
+import { ImageData } from '../../models/ImageData'
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytes
 } from '@angular/fire/storage'
+import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-upload',
@@ -19,7 +21,7 @@ import {
 export class UploadComponent implements OnInit {
   fileName: string
   selectedImages: string[] = []
-  public images$ = this.store.select(getImages)
+  public images$: Observable<ImageData[]>
   constructor (
     private dbService: DbService,
     private store: Store<SegmentatorState>
@@ -27,6 +29,7 @@ export class UploadComponent implements OnInit {
 
   ngOnInit () {
     this.store.dispatch(getImagesRequest())
+    this.images$ = this.store.select(getImages)
   }
 
   removeImageFromDb (image: string) {

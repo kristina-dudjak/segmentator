@@ -12,21 +12,26 @@ import {
 } from 'rxjs'
 import { DbService } from '../services/db.service'
 import {
+  getImagesBundleFailure,
+  getImagesBundleRequest,
+  getImagesBundleSuccess,
   getImagesFailure,
   getImagesRequest,
   getImagesSuccess,
   getUserImagesFailure,
   getUserImagesRequest,
   getUserImagesSuccess,
+  removeImage,
   saveImageFailure,
   saveImageRequest,
   saveImageSuccess,
   selectImage
 } from './segmentator.actions'
-import { ImageData } from './segmentator.state'
 import { Store } from '@ngrx/store'
 import { AuthState } from '../../auth/store/auth.state'
 import { getUser } from '../../auth/store/auth.selectors'
+import { getImages } from './segmentator.selectors'
+import { ImageData } from '../models/ImageData'
 
 @Injectable()
 export class SegmentatorEffects {
@@ -39,6 +44,28 @@ export class SegmentatorEffects {
   getImages$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getImagesRequest),
+      switchMap(() =>
+        this.dbService.getImages().pipe(
+          take(1),
+          mergeMap(images => {
+            return [
+              selectImage({
+                selectedImage: images[0]
+              }),
+              getImagesSuccess({
+                images: [...images]
+              })
+            ]
+          }),
+          catchError(error => of(getImagesFailure({ error: error.message })))
+        )
+      )
+    )
+  )
+
+  getImagesBundle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getImagesBundleRequest),
       withLatestFrom(this.authStore.select(getUser)),
       switchMap(([action, user]) =>
         this.dbService.getImages().pipe(
@@ -60,19 +87,31 @@ export class SegmentatorEffects {
                   selectImage({
                     selectedImage: filteredImages[0]
                   }),
-                  getImagesSuccess({
+                  getImagesBundleSuccess({
                     images: filteredImages.map(image => image)
                   })
                 ]
               }),
               catchError(error =>
-                of(getImagesFailure({ error: error.message }))
+                of(getImagesBundleFailure({ error: error.message }))
               )
             )
           )
         )
       ),
       concatMap(actions => Object.values(actions))
+    )
+  )
+
+  removeImage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(removeImage),
+      withLatestFrom(this.authStore.select(getImages)),
+      map(([action, images]) => {
+        return selectImage({
+          selectedImage: images[0]
+        })
+      })
     )
   )
 

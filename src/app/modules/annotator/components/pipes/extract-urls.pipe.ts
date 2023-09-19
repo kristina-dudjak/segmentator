@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { ImageData } from '../../store/segmentator.state'
+import { ImageData } from '../../models/ImageData'
 
 @Pipe({
   name: 'extractUrls'

@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { ImageData, SegmentatorState } from '../../store/segmentator.state'
+import { SegmentatorState } from '../../store/segmentator.state'
 import { selectImage } from '../../store/segmentator.actions'
 import { getImage } from '../../store/segmentator.selectors'
+import { ImageData } from '../../models/ImageData'
 
 @Component({
   selector: 'app-images-sidebar',

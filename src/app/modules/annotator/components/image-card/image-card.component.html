@@ -1,16 +1,27 @@
-<svg
-  class="svg"
-  id="svg"
-  #svg
-  (mousedown)="onMouseDown($event)"
-  (mousemove)="onMouseMove($event)"
-  (mouseup)="onMouseUp($event)"
-  [style.background-image]="'url(' + image.url + ')'"
-></svg>
-<button *ngIf="user$ | async as user" (click)="save(user)">Save</button>
-<button
-  *ngIf="route === 'review' && user$ | async as user"
-  (click)="delete(user)"
->
-  Delete
-</button>
+<div class="container">
+  <svg
+    class="svg"
+    id="svg"
+    #svg
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp($event)"
+    [style.background-image]="'url(' + image.url + ')'"
+  ></svg>
+  <button
+    class="btn"
+    mat-raised-button
+    *ngIf="user$ | async as user"
+    (click)="save(user)"
+  >
+    Save
+  </button>
+  <button
+    class="btn"
+    mat-raised-button
+    *ngIf="route === 'review' && user$ | async as user"
+    (click)="delete(user)"
+  >
+    Delete
+  </button>
+</div>

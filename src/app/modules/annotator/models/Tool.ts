@@ -1,10 +1,8 @@
 import { Store } from '@ngrx/store'
-import {
-  ImageData,
-  Point,
-  SegmentatorState
-} from '../../annotator/store/segmentator.state'
 import * as d3 from 'd3'
+import { ImageData } from './ImageData'
+import { SegmentatorState } from '../store/segmentator.state'
+import { Point } from './Point'
 export abstract class Tool {
   abstract icon: string
   update (canvas: SVGElement, image: ImageData) {
@@ -19,9 +17,9 @@ export abstract class Tool {
               .map(point => `${point.x},${point.y}`)
               .join(' ')
           )
-          .attr('fill', 'red')
+          .attr('fill', 'rgba(0, 0, 0, 0.5)')
           .attr('class', `shape${i}`)
-          .attr('stroke', 'red')
+          .attr('stroke', 'rgba(0, 0, 0, 0.5)')
           .attr('stroke-width', '3')
       } else if (image.shapes[i].shapeType === 'line') {
         d3.select(canvas)
@@ -32,9 +30,9 @@ export abstract class Tool {
               .map(point => `${point.x},${point.y}`)
               .join(' ')
           )
-          .attr('fill', 'red')
+          .attr('fill', 'rgba(0, 0, 0, 0.5)')
           .attr('class', `shape${i}`)
-          .attr('stroke', 'red')
+          .attr('stroke', 'rgba(0, 0, 0, 0.5)')
           .attr('stroke-width', '3')
       } else if (image.shapes[i].shapeType === 'rect') {
         let startX = image.shapes[i].points[0].x
@@ -57,7 +55,7 @@ export abstract class Tool {
           .attr('y', startY)
           .attr('width', width)
           .attr('height', height)
-          .attr('fill', 'red')
+          .attr('fill', 'rgba(0, 0, 0, 0.5)')
           .attr('class', `shape${i}`)
       }
     }

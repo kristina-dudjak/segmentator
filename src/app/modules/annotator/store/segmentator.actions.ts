@@ -1,7 +1,8 @@
 import { createAction, props } from '@ngrx/store'
 import { Tool } from '../../annotator/models/Tool'
-import { ImageData, Point } from './segmentator.state'
 import { User } from '../../auth/models/User'
+import { Point } from '../models/Point'
+import { ImageData } from '../models/ImageData'
 
 export const segmentatorFeatureKey = 'segmentator'
 
@@ -23,6 +24,32 @@ export const getImagesSuccess = createAction(
   }>()
 )
 
+export const getImagesFailure = createAction(
+  `[${segmentatorFeatureKey}] getImages Failure`,
+  props<{ error: string }>()
+)
+
+export const getImagesBundleRequest = createAction(
+  `[${segmentatorFeatureKey}] getImages bundle Request`
+)
+
+export const getImagesBundleSuccess = createAction(
+  `[${segmentatorFeatureKey}] getImages bundle Success`,
+  props<{
+    images: ImageData[]
+  }>()
+)
+
+export const getImagesBundleFailure = createAction(
+  `[${segmentatorFeatureKey}] getImages bundle Failure`,
+  props<{ error: string }>()
+)
+
+export const removeImage = createAction(
+  `[${segmentatorFeatureKey}] Remove Image`,
+  props<{ image: ImageData }>()
+)
+
 export const getUserImagesFailure = createAction(
   `[${segmentatorFeatureKey}] getUserImages Failure`,
   props<{ error: string }>()
@@ -37,11 +64,6 @@ export const getUserImagesSuccess = createAction(
   props<{
     images: ImageData[]
   }>()
-)
-
-export const getImagesFailure = createAction(
-  `[${segmentatorFeatureKey}] getImages Failure`,
-  props<{ error: string }>()
 )
 
 export const selectImage = createAction(

@@ -9,17 +9,13 @@ import {
   ViewChild
 } from '@angular/core'
 import { Tool } from '../../models/Tool'
-import {
-  ImageData,
-  Point,
-  SegmentatorState
-} from '../../../annotator/store/segmentator.state'
+import { SegmentatorState } from '../../../annotator/store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { AuthState } from 'src/app/modules/auth/store/auth.state'
 import { getUser } from 'src/app/modules/auth/store/auth.selectors'
 import { User } from 'src/app/modules/auth/models/User'
 import { PolygonTool } from '../../../annotator/services/polygon-tool.service'
-import { saveImageRequest } from '../../store/segmentator.actions'
+import { removeImage, saveImageRequest } from '../../store/segmentator.actions'
 import { ActivatedRoute } from '@angular/router'
 import { DbService } from '../../services/db.service'
 import {
@@ -28,6 +24,9 @@ import {
   ref,
   uploadBytes
 } from '@angular/fire/storage'
+import * as d3 from 'd3'
+import { Point } from '../../models/Point'
+import { ImageData } from '../../models/ImageData'
 
 @Component({
   selector: 'app-image-card',
@@ -110,11 +109,17 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     }
   }
 
-  async uploadImage (file: File, user: User) {
+  async uploadImage (binaryImage: Blob, user: User) {
+    const fileName = `${this.image.id}-${user.uid}.jpg`
     const storage = getStorage()
-    const storageRef = ref(storage, 'masks/' + file.name)
-    await uploadBytes(storageRef, file)
-    const imageUrl = await getDownloadURL(storageRef)
+    const maskRef = ref(storage, 'masks/' + fileName)
+    await uploadBytes(maskRef, binaryImage)
+    const imageUrl = await getDownloadURL(maskRef)
+    const response = await fetch(this.image.url)
+    const imageBlob = await response.blob()
+    const storageRef = ref(storage, 'uimages/' + fileName)
+    await uploadBytes(storageRef, imageBlob)
+
     this.store.dispatch(
       saveImageRequest({ user, image: this.image, marked: imageUrl })
     )
@@ -122,42 +127,31 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
 
   async save (user: User) {
     const svgElement = document.getElementById('svg')
+    d3.select(svgElement).selectAll('*').style('fill', 'white')
     const serializer = new XMLSerializer()
     const svgString = serializer.serializeToString(svgElement)
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml' })
     const svgURL = URL.createObjectURL(svgBlob)
-
     const img = new Image()
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
-    const dataUrlPromise = new Promise(resolve => {
-      img.onload = function () {
-        canvas.width = img.width
-        canvas.height = img.height
-        ctx.drawImage(img, 0, 0)
-        const dataUrl = canvas.toDataURL()
-        URL.revokeObjectURL(svgURL)
-        resolve(dataUrl)
-      }
-    })
-    img.src = svgURL
-    dataUrlPromise.then(async (dataUrl: string) => {
-      const fileName = `${this.image.id}-${user.uid}`
-      const file = this.dataUrlToFile(dataUrl, fileName)
-      await this.uploadImage(file, user)
-    })
-  }
-
-  dataUrlToFile (dataUrl: string, fileName: string): File {
-    const arr = dataUrl.split(',')
-    const mime = arr[0].match(/:(.*?);/)[1]
-    const bstr = atob(arr[1])
-    let n = bstr.length
-    const u8arr = new Uint8Array(n)
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n)
+    img.onload = async () => {
+      canvas.width = img.width
+      canvas.height = img.height
+      ctx.fillStyle = 'black'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, 0, 0)
+      const binaryImage: Blob = await new Promise(resolve =>
+        canvas.toBlob(resolve, 'image/jpeg')
+      )
+      URL.revokeObjectURL(svgURL)
+      await this.uploadImage(binaryImage, user)
     }
-    return new File([u8arr], fileName, { type: mime })
+    img.src = svgURL
+
+    if (this.route === 'new') {
+      this.store.dispatch(removeImage({ image: this.image }))
+    }
   }
 
   delete (user: User) {

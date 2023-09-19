@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Tool } from '../../annotator/models/Tool'
 import * as d3 from 'd3'
-import { ImageData, Point, SegmentatorState } from '../store/segmentator.state'
+import { SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { addShape } from '../store/segmentator.actions'
+import { Point } from '../models/Point'
+import { ImageData } from '../models/ImageData'
 @Injectable({
   providedIn: 'root'
 })
@@ -62,7 +64,7 @@ export class RectTool extends Tool {
         .attr('width', width)
         .attr('height', height)
         .attr('class', 'temporary-rect')
-        .attr('fill', 'red')
+        .attr('fill', 'rgba(0, 0, 0, 0.5)')
     }
   }
 
@@ -102,7 +104,7 @@ export class RectTool extends Tool {
         .attr('width', width)
         .attr('height', height)
         .attr('class', `shape${image.shapes.length}`)
-        .attr('fill', 'red')
+        .attr('fill', 'rgba(0, 0, 0, 0.5)')
       store.dispatch(addShape({ image, shapeType: 'rect', points: points }))
     }
   }

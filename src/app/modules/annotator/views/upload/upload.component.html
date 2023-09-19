@@ -16,19 +16,27 @@
     (newItemEvent)="removeImage($event)"
   ></app-image-list>
   <button
+    mat-raised-button
     class="main__save"
     *ngIf="selectedImages.length !== 0"
     (click)="save()"
   >
-    Save to db
+    Save to database
   </button>
   <mat-divider class="main__divider"></mat-divider>
-  <h2 class="main__title">Images from the database</h2>
-  <app-image-list
-    class="main__list"
-    [urls]="images$ | async | extractUrls"
-    (newItemEvent)="removeImageFromDb($event)"
-  ></app-image-list>
+  <h2 class="main__title">
+    Images from the database: {{ (images$ | async | extractUrls).length }}
+  </h2>
+  <div class="main__list" *ngIf="images$ | async | extractUrls as urls">
+    <app-image-list
+      *ngIf="urls.length !== 0"
+      [urls]="urls"
+      (newItemEvent)="removeImageFromDb($event)"
+    ></app-image-list>
+    <p *ngIf="urls.length === 0">
+      There are no images in the db. Click the button above to add images.
+    </p>
+  </div>
 </div>
 
 <input

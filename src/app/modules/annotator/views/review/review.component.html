@@ -21,5 +21,8 @@
       [image]="image$ | async"
     ></app-toolbar>
   </ng-container>
-  <p *ngIf="images.length === 0">There are no images!</p>
+  <div class="main__return" *ngIf="images.length === 0">
+    <p>You have no annotated images!</p>
+    <button mat-raised-button [routerLink]="['../']">Return to home</button>
+  </div>
 </main>

@@ -14,6 +14,10 @@
     display: grid;
     justify-items: center;
 
+    @media screen and (max-width: 768px) {
+      grid-column: 1 / 13;
+    }
+
     &__google {
       width: 80%;
     }
@@ -56,6 +60,11 @@
     justify-content: center;
     background-color: mat.get-color-from-palette($accent, 500);
     animation: loadDown 1s;
+    text-align: center;
+
+    @media screen and (max-width: 768px) {
+      grid-column: 1 / 13;
+    }
 
     &__action {
       background-color: mat.get-color-from-palette($accent, 500);

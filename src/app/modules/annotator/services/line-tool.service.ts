@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core'
 import * as d3 from 'd3'
 import { Tool } from '../../annotator/models/Tool'
-import { ImageData, Point, SegmentatorState } from '../store/segmentator.state'
+import { SegmentatorState } from '../store/segmentator.state'
 import { Store } from '@ngrx/store'
 import { addShape } from '../store/segmentator.actions'
+import { Point } from '../models/Point'
+import { ImageData } from '../models/ImageData'
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +33,7 @@ export class LineTool extends Tool {
       .attr('points', points.map(point => `${point.x},${point.y}`).join(' '))
       .attr('class', `shape${image.shapes.length}`)
       .attr('fill', 'none')
-      .attr('stroke', 'red')
+      .attr('stroke', 'rgba(0, 0, 0, 0.5)')
       .attr('stroke-width', '3')
 
     const limit = 10
@@ -53,7 +55,7 @@ export class LineTool extends Tool {
             points.map(point => `${point.x},${point.y}`).join(' ')
           )
           .attr('class', `shape${image.shapes.length}`)
-          .attr('fill', 'red')
+          .attr('fill', 'rgba(0, 0, 0, 0.5)')
         store.dispatch(addShape({ image, shapeType: 'line', points: points }))
       }
     }
@@ -77,7 +79,7 @@ export class LineTool extends Tool {
           temporaryPoints.map(point => `${point.x},${point.y}`).join(' ')
         )
         .attr('fill', 'none')
-        .attr('stroke', 'red')
+        .attr('stroke', 'rgba(0, 0, 0, 0.5)')
         .attr('stroke-width', '3')
     }
   }

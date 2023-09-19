@@ -10,6 +10,7 @@
   &__sidebar {
     grid-column: 1 / 3;
     overflow-y: auto;
+    max-height: 100%;
   }
 
   &__image {
@@ -18,5 +19,9 @@
 
   &__toolbar {
     grid-column: 11 / 11;
+  }
+
+  &__return {
+    grid-column: 4 / 10;
   }
 }
