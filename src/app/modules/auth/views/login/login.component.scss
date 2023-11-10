@@ -49,6 +49,11 @@
     &__submit {
       background-color: mat.get-color-from-palette($accent, 500);
     }
+
+    &__error {
+      margin-top: 8px;
+      color: mat.get-color-from-palette($error, normal);
+    }
   }
 
   &__redirect {

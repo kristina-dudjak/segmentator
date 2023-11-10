@@ -5,6 +5,7 @@ import { PasswordRegex } from '../../const/PasswordRegex'
 import { ValidatorService } from '../../services/validator.service'
 import { googleLoginRequest, loginRequest } from '../../store/auth.actions'
 import { AuthState } from '../../store/auth.state'
+import { getError } from '../../store/auth.selectors'
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,11 @@ import { AuthState } from '../../store/auth.state'
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor (private fb: FormBuilder, private store: Store<AuthState>) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<AuthState>
+  ) {}
+  errorMessage$ = this.store.select(getError)
 
   loginForm = this.fb.group(
     {
@@ -28,14 +33,14 @@ export class LoginComponent {
     },
     {
       validators: [
-        ValidatorService.validator('email'),
-        ValidatorService.validator('password')
+        ValidatorService.customValidator('email'),
+        ValidatorService.customValidator('password')
       ],
       updateOn: 'change'
     }
   )
 
-  onSubmit () {
+  onSubmit() {
     const { email, password } = this.loginForm.value
     this.store.dispatch(
       loginRequest({
@@ -47,7 +52,7 @@ export class LoginComponent {
     )
   }
 
-  onGoogle () {
+  onGoogle() {
     this.store.dispatch(googleLoginRequest())
   }
 }

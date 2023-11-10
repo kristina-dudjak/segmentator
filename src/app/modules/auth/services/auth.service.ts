@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { from, map, of, switchMap } from 'rxjs'
+import { catchError, from, map, of, switchMap, throwError } from 'rxjs'
 import firebase from 'firebase/compat/app'
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor (private fbAuth: AngularFireAuth, private db: AngularFirestore) {}
+  constructor(
+    private fbAuth: AngularFireAuth,
+    private db: AngularFirestore
+  ) {}
 
-  getUser () {
-    return this.fbAuth.authState
+  getUser() {
+    return this.fbAuth.authState.pipe(
+      catchError(error => throwError(() => error))
+    )
   }
 
-  register (email: string, password: string) {
+  register(email: string, password: string) {
     return from(
       this.fbAuth.createUserWithEmailAndPassword(email, password)
     ).pipe(
@@ -23,18 +28,23 @@ export class AuthService {
             .collection('users')
             .doc(user.uid)
             .set({ email }, { merge: true })
-        ).pipe(map(() => user))
-      })
+        ).pipe(
+          map(() => user),
+          catchError(error => throwError(() => error))
+        )
+      }),
+      catchError(error => throwError(() => error))
     )
   }
 
-  logIn (email: string, password: string) {
+  logIn(email: string, password: string) {
     return from(this.fbAuth.signInWithEmailAndPassword(email, password)).pipe(
-      map(({ user }) => user)
+      map(({ user }) => user),
+      catchError(error => throwError(() => error))
     )
   }
 
-  googleLogIn () {
+  googleLogIn() {
     return from(
       this.fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
     ).pipe(
@@ -50,16 +60,20 @@ export class AuthService {
                   },
                   { merge: true }
                 )
-              ).pipe(map(() => user))
+              ).pipe(
+                map(() => user),
+                catchError(error => throwError(() => error))
+              )
             }
             return of(user)
-          })
+          }),
+          catchError(error => throwError(() => error))
         )
       })
     )
   }
 
-  signOut () {
+  signOut() {
     return from(this.fbAuth.signOut())
   }
 }

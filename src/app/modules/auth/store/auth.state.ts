@@ -1,11 +1,11 @@
 import { User } from '../models/User'
 
 export interface AuthState {
-  user: User | null
-  error: string | null
+  readonly user: User
+  readonly error: string
 }
 
 export const initialState: AuthState = {
-  user: null,
-  error: null
+  user: undefined,
+  error: undefined
 }

@@ -8,6 +8,7 @@ import {
 import { PasswordRegex } from '../../const/PasswordRegex'
 import { ValidatorService } from '../../services/validator.service'
 import { AuthState } from '../../store/auth.state'
+import { getError } from '../../store/auth.selectors'
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,11 @@ import { AuthState } from '../../store/auth.state'
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  constructor (private fb: FormBuilder, private store: Store<AuthState>) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<AuthState>
+  ) {}
+  errorMessage$ = this.store.select(getError)
 
   registerForm = this.fb.group(
     {
@@ -39,16 +44,16 @@ export class RegisterComponent {
     },
     {
       validators: [
-        ValidatorService.validator('email'),
-        ValidatorService.validator('password'),
-        ValidatorService.validator('repeatPassword'),
+        ValidatorService.customValidator('email'),
+        ValidatorService.customValidator('password'),
+        ValidatorService.customValidator('repeatPassword'),
         ValidatorService.passwordMatchValidator('repeatPassword')
       ],
       updateOn: 'change'
     }
   )
 
-  onSubmit () {
+  onSubmit() {
     const { email, password } = this.registerForm.value
     this.store.dispatch(
       registerRequest({
@@ -60,7 +65,7 @@ export class RegisterComponent {
     )
   }
 
-  onGoogle () {
+  onGoogle() {
     this.store.dispatch(googleLoginRequest())
   }
 }

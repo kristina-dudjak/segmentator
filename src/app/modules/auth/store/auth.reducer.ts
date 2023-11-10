@@ -37,10 +37,7 @@ export const authReducer = createReducer(
     ...state,
     user: user
   })),
-  on(getUserFailure, (state, { error }) => ({
-    ...state,
-    error: error
-  })),
+  on(getUserFailure, state => ({ ...state })),
   on(registerRequest, state => ({ ...state })),
   on(registerSuccess, (state, { user }) => ({
     ...state,

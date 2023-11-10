@@ -15,8 +15,7 @@ export const getUserSuccess = createAction(
 )
 
 export const getUserFailure = createAction(
-  `[${authFeatureKey}] Get User Failure`,
-  props<{ error: string }>()
+  `[${authFeatureKey}] Get User Failure`
 )
 
 export const loginRequest = createAction(

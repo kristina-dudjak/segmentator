@@ -6,7 +6,7 @@ import { ErrorMessages } from '../const/ErrorMessages'
   providedIn: 'root'
 })
 export class ValidatorService {
-  static validator (controlName: string) {
+  static customValidator(controlName: string) {
     return (control: AbstractControl): ValidationErrors | null => {
       const form = control.get(controlName)
       if (!form?.errors) return null
@@ -15,7 +15,7 @@ export class ValidatorService {
     }
   }
 
-  static passwordMatchValidator (controlName: string): ValidatorFn {
+  static passwordMatchValidator(controlName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const form = control.get(controlName)
       if (form.value === control.get('password').value) {

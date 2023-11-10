@@ -75,6 +75,11 @@
     >
       Sign in
     </button>
+    <span
+      class="register__form__error"
+      *ngIf="(errorMessage$ | async) && (errorMessage$ | async) as errorMessage"
+      >{{ errorMessage }}</span
+    >
   </form>
   <aside class="register__redirect">
     <h2 class="register__redirect__title">Already have an account?</h2>

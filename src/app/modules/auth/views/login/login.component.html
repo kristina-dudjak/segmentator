@@ -46,6 +46,11 @@
     >
       Log in
     </button>
+    <span
+      class="login__form__error"
+      *ngIf="(errorMessage$ | async) && (errorMessage$ | async) as errorMessage"
+      >{{ errorMessage }}</span
+    >
   </form>
   <aside class="login__redirect">
     <h2 class="login__redirect__title">New here?</h2>

@@ -24,26 +24,45 @@ import { User } from '../models/User'
 
 @Injectable()
 export class AuthEffects {
-  constructor (
+  constructor(
     private authService: AuthService,
     private actions$: Actions,
     private router: Router
   ) {}
 
+  private handleSuccess<
+    T extends
+      | typeof getUserSuccess
+      | typeof registerSuccess
+      | typeof googleLoginSuccess
+      | typeof loginSuccess
+  >(user: firebase.default.User, action: T) {
+    const userModel: User = { uid: user.uid, email: user.email }
+    this.router.navigateByUrl('/annotator')
+    return action({ user: userModel })
+  }
+
+  private handleError<
+    T extends
+      | typeof registerFailure
+      | typeof googleLoginFailure
+      | typeof loginFailure
+      | typeof signOutFailure
+  >(error: string, action: T) {
+    return of(action({ error }))
+  }
+
   getUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getUserRequest),
-      mergeMap(() =>
-        this.authService.getUser().pipe(
-          map(user => {
-            const userModel: User = {
-              uid: user.uid,
-              email: user.email
-            }
-            return getUserSuccess({ user: userModel })
-          }),
-          catchError(error => of(getUserFailure(error)))
-        )
+      switchMap(() =>
+        this.authService
+          .getUser()
+          .pipe(
+            map(user =>
+              user ? this.handleSuccess(user, getUserSuccess) : getUserFailure()
+            )
+          )
       )
     )
   )
@@ -53,15 +72,8 @@ export class AuthEffects {
       ofType(registerRequest),
       mergeMap(({ credentials: { email, password } }) =>
         this.authService.register(email, password).pipe(
-          map(user => {
-            const userModel: User = {
-              uid: user.uid,
-              email: user.email
-            }
-            this.router.navigateByUrl('/annotator')
-            return registerSuccess({ user: userModel })
-          }),
-          catchError(error => of(registerFailure(error)))
+          map(user => this.handleSuccess(user, registerSuccess)),
+          catchError(error => this.handleError(error.message, registerFailure))
         )
       )
     )
@@ -70,17 +82,12 @@ export class AuthEffects {
   googleLogin$ = createEffect(() =>
     this.actions$.pipe(
       ofType(googleLoginRequest),
-      switchMap(() =>
+      mergeMap(() =>
         this.authService.googleLogIn().pipe(
-          map(user => {
-            const userModel: User = {
-              uid: user.uid,
-              email: user.email
-            }
-            this.router.navigateByUrl('/annotator')
-            return googleLoginSuccess({ user: userModel })
-          }),
-          catchError(error => of(googleLoginFailure(error)))
+          map(user => this.handleSuccess(user, googleLoginSuccess)),
+          catchError(error =>
+            this.handleError(error.message, googleLoginFailure)
+          )
         )
       )
     )
@@ -91,15 +98,8 @@ export class AuthEffects {
       ofType(loginRequest),
       mergeMap(({ credentials: { email, password } }) =>
         this.authService.logIn(email, password).pipe(
-          map(user => {
-            const userModel: User = {
-              uid: user.uid,
-              email: user.email
-            }
-            this.router.navigateByUrl('/annotator')
-            return loginSuccess({ user: userModel })
-          }),
-          catchError(error => of(loginFailure(error)))
+          map(user => this.handleSuccess(user, loginSuccess)),
+          catchError(error => this.handleError(error.message, loginFailure))
         )
       )
     )
@@ -114,7 +114,7 @@ export class AuthEffects {
             this.router.navigateByUrl('/login')
             return signOutSuccess()
           }),
-          catchError(error => of(signOutFailure(error)))
+          catchError(error => this.handleError(error.message, signOutFailure))
         )
       )
     )

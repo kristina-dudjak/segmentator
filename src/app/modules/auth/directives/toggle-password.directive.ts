@@ -11,7 +11,7 @@ import { MatButton } from '@angular/material/button'
 })
 export class TogglePasswordDirective {
   private isShown = false
-  constructor (
+  constructor(
     private el: ElementRef,
     private vcRef: ViewContainerRef,
     private renderer: Renderer2
@@ -19,9 +19,8 @@ export class TogglePasswordDirective {
     this.setup()
   }
 
-  setup () {
+  private setup() {
     const parent = this.el.nativeElement.parentNode
-
     const matButton =
       this.vcRef.createComponent(MatButton).instance._elementRef.nativeElement
     const matIcon =
@@ -36,7 +35,7 @@ export class TogglePasswordDirective {
     parent.appendChild(matButton)
   }
 
-  toggle (button: HTMLElement) {
+  private toggle(button: HTMLElement) {
     this.isShown = !this.isShown
     const type = this.isShown ? 'text' : 'password'
     this.renderer.setProperty(this.el.nativeElement, 'type', type)
