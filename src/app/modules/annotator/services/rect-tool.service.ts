@@ -12,7 +12,7 @@ import { ImageData } from '../models/ImageData'
 export class RectTool extends Tool {
   icon: string = 'crop_16_9'
 
-  override onMouseDown (
+  override onMouseDown(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,
@@ -22,7 +22,7 @@ export class RectTool extends Tool {
     this.draw(event, canvas, image, store, points)
   }
 
-  override onMouseUp (
+  override onMouseUp(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,
@@ -33,7 +33,7 @@ export class RectTool extends Tool {
     d3.select(canvas).select('.temporary-rect').remove()
   }
 
-  override onMouseMove (event: MouseEvent, canvas: SVGElement, points: Point[]) {
+  override onMouseMove(event: MouseEvent, canvas: SVGElement, points: Point[]) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight
@@ -68,7 +68,7 @@ export class RectTool extends Tool {
     }
   }
 
-  draw (
+  draw(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,

@@ -41,18 +41,18 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
   user$ = this.authStore.select(getUser)
   route: string
 
-  ngOnInit () {
+  ngOnInit() {
     this.route = this.activatedRoute.snapshot.routeConfig.path
   }
 
-  constructor (
+  constructor(
     private store: Store<SegmentatorState>,
     private authStore: Store<AuthState>,
     private activatedRoute: ActivatedRoute,
     private db: DbService
   ) {}
 
-  onMouseDown (event: MouseEvent) {
+  onMouseDown(event: MouseEvent) {
     this.tool.onMouseDown?.(
       event,
       this.svgRef.nativeElement,
@@ -62,11 +62,11 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     )
   }
 
-  onMouseMove (event: MouseEvent) {
+  onMouseMove(event: MouseEvent) {
     this.tool.onMouseMove?.(event, this.svgRef.nativeElement, this.points)
   }
 
-  onMouseUp (event: MouseEvent) {
+  onMouseUp(event: MouseEvent) {
     this.tool.onMouseUp?.(
       event,
       this.svgRef.nativeElement,
@@ -76,7 +76,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     )
   }
 
-  ngAfterViewInit () {
+  ngAfterViewInit() {
     const svg = this.svgRef.nativeElement
     const img = new Image()
     img.src = this.image.url
@@ -92,7 +92,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     })
   }
 
-  ngOnChanges (changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     const toolChange = changes['tool']
     if (this.tool instanceof PolygonTool && !toolChange) {
       this.points = [...this.points]
@@ -109,7 +109,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     }
   }
 
-  async uploadImage (binaryImage: Blob, user: User) {
+  async uploadImage(binaryImage: Blob, user: User) {
     const fileName = `${this.image.id}-${user.uid}.jpg`
     const storage = getStorage()
     const maskRef = ref(storage, 'masks/' + fileName)
@@ -125,7 +125,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     )
   }
 
-  async save (user: User) {
+  async save(user: User) {
     const svgElement = document.getElementById('svg')
     d3.select(svgElement).selectAll('*').style('fill', 'white')
     const serializer = new XMLSerializer()
@@ -154,7 +154,7 @@ export class ImageCardComponent implements OnChanges, AfterViewInit, OnInit {
     }
   }
 
-  delete (user: User) {
+  delete(user: User) {
     this.db.removeUserImage(user, this.image)
   }
 }

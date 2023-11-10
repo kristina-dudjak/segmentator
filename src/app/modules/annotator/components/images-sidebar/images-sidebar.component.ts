@@ -13,9 +13,9 @@ import { ImageData } from '../../models/ImageData'
 export class ImagesSidebarComponent {
   @Input() images: ImageData[]
   selectedImage$ = this.store.select(getImage)
-  constructor (private store: Store<SegmentatorState>) {}
+  constructor(private store: Store<SegmentatorState>) {}
 
-  change (selectedImage: ImageData) {
+  change(selectedImage: ImageData) {
     this.store.dispatch(selectImage({ selectedImage }))
   }
 }

@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing'
 
-import { DbService } from './db.service';
+import { DbService } from './db.service'
 
 describe('DbService', () => {
-  let service: DbService;
+  let service: DbService
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(DbService);
-  });
+    TestBed.configureTestingModule({})
+    service = TestBed.inject(DbService)
+  })
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+    expect(service).toBeTruthy()
+  })
+})

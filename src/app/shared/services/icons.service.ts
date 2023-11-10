@@ -8,12 +8,12 @@ import { Icon } from '../models/Icon'
   providedIn: 'root'
 })
 export class IconsService {
-  constructor (
+  constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {}
 
-  addIcons () {
+  addIcons() {
     icons.map((icon: Icon) => {
       this.matIconRegistry.addSvgIconLiteral(
         icon.name,

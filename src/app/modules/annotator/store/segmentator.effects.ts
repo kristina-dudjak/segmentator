@@ -35,7 +35,7 @@ import { ImageData } from '../models/ImageData'
 
 @Injectable()
 export class SegmentatorEffects {
-  constructor (
+  constructor(
     private actions$: Actions,
     private dbService: DbService,
     private authStore: Store<AuthState>

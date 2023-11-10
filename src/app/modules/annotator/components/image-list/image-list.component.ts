@@ -9,7 +9,7 @@ export class ImageListComponent {
   @Input() urls: string[]
   @Output() newItemEvent = new EventEmitter<string>()
 
-  removeImage (value: string) {
+  removeImage(value: string) {
     this.newItemEvent.emit(value)
   }
 }

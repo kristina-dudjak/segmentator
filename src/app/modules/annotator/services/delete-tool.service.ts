@@ -13,7 +13,7 @@ import { ImageData } from '../models/ImageData'
 export class DeleteTool extends Tool {
   icon: string = 'delete'
 
-  override onMouseDown (
+  override onMouseDown(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,

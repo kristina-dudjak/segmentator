@@ -5,7 +5,7 @@ import { ImageData } from '../../models/ImageData'
   name: 'extractUrls'
 })
 export class ExtractUrlsPipe implements PipeTransform {
-  transform (images: ImageData[]): string[] {
+  transform(images: ImageData[]): string[] {
     return images.map(image => image.url)
   }
 }

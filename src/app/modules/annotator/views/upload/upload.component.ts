@@ -22,27 +22,27 @@ export class UploadComponent implements OnInit {
   fileName: string
   selectedImages: string[] = []
   public images$: Observable<ImageData[]>
-  constructor (
+  constructor(
     private dbService: DbService,
     private store: Store<SegmentatorState>
   ) {}
 
-  ngOnInit () {
+  ngOnInit() {
     this.store.dispatch(getImagesRequest())
     this.images$ = this.store.select(getImages)
   }
 
-  removeImageFromDb (image: string) {
+  removeImageFromDb(image: string) {
     this.dbService.removeImage(image)
   }
 
-  removeImage (imageUrl: string) {
+  removeImage(imageUrl: string) {
     this.selectedImages = this.selectedImages.filter(
       image => image !== imageUrl
     )
   }
 
-  async onFileSelected (event) {
+  async onFileSelected(event) {
     const files: FileList = event.target.files
     for (let i = 0; i < files.length; i++) {
       const file: File = files[i]
@@ -51,7 +51,7 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  async uploadImage (file: File) {
+  async uploadImage(file: File) {
     const storage = getStorage()
     const storageRef = ref(storage, 'images/' + file.name)
 
@@ -60,7 +60,7 @@ export class UploadComponent implements OnInit {
     this.selectedImages.push(imageUrl)
   }
 
-  save () {
+  save() {
     this.dbService.uploadImages(this.selectedImages)
   }
 }

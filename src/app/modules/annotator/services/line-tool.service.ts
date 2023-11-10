@@ -13,7 +13,7 @@ import { ImageData } from '../models/ImageData'
 export class LineTool extends Tool {
   icon: string = 'timeline'
 
-  override onMouseDown (
+  override onMouseDown(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,
@@ -61,7 +61,7 @@ export class LineTool extends Tool {
     }
   }
 
-  override onMouseMove (event: MouseEvent, canvas: SVGElement, points: Point[]) {
+  override onMouseMove(event: MouseEvent, canvas: SVGElement, points: Point[]) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight

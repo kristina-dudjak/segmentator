@@ -12,18 +12,18 @@ import { ImageData } from '../../models/ImageData'
   styleUrls: ['./annotator.component.scss']
 })
 export class AnnotatorComponent implements OnInit {
-  constructor (private store: Store<SegmentatorState>) {}
+  constructor(private store: Store<SegmentatorState>) {}
 
   public selectedTool$ = this.store.select(getTool)
   public images$: Observable<ImageData[]>
   public image$ = this.store.select(getImage)
 
-  ngOnInit () {
+  ngOnInit() {
     this.store.dispatch(getImagesBundleRequest())
     this.images$ = this.store.select(getImages)
   }
 
-  trackByUrl (index: number, image: ImageData): string {
+  trackByUrl(index: number, image: ImageData): string {
     return image.url
   }
 }

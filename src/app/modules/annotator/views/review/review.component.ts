@@ -12,18 +12,18 @@ import { ImageData } from '../../models/ImageData'
   styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent implements OnInit {
-  constructor (private store: Store<SegmentatorState>) {}
+  constructor(private store: Store<SegmentatorState>) {}
 
   public selectedTool$ = this.store.select(getTool)
   public images$: Observable<ImageData[]>
   public image$ = this.store.select(getImage)
 
-  ngOnInit () {
+  ngOnInit() {
     this.store.dispatch(getUserImagesRequest())
     this.images$ = this.store.select(getImages)
   }
 
-  trackByUrl (index: number, image: ImageData) {
+  trackByUrl(index: number, image: ImageData) {
     return image.url
   }
 }

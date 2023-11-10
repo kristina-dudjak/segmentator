@@ -8,9 +8,9 @@ import { ImageData } from '../models/ImageData'
   providedIn: 'root'
 })
 export class DbService {
-  constructor (private db: AngularFirestore) {}
+  constructor(private db: AngularFirestore) {}
 
-  getImages () {
+  getImages() {
     return this.db
       .collection('images')
       .snapshotChanges()
@@ -28,7 +28,7 @@ export class DbService {
       )
   }
 
-  getUserImages (user: User) {
+  getUserImages(user: User) {
     return this.db
       .collection('users')
       .doc(user.uid)
@@ -46,11 +46,11 @@ export class DbService {
       )
   }
 
-  removeImage (imageUrl: string) {
+  removeImage(imageUrl: string) {
     this.db.collection('images').doc(imageUrl).delete()
   }
 
-  removeUserImage (user: User, image: ImageData) {
+  removeUserImage(user: User, image: ImageData) {
     this.db
       .collection('users')
       .doc(user.uid)
@@ -59,7 +59,7 @@ export class DbService {
       .delete()
   }
 
-  saveImage (user: User, originalImage: ImageData, markedImage: string) {
+  saveImage(user: User, originalImage: ImageData, markedImage: string) {
     const imageRef = this.db
       .collection('users')
       .doc(user.uid)
@@ -75,7 +75,7 @@ export class DbService {
     )
   }
 
-  uploadImages (images: string[]) {
+  uploadImages(images: string[]) {
     return forkJoin(
       images.map(image =>
         from(

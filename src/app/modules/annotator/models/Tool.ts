@@ -5,7 +5,7 @@ import { SegmentatorState } from '../store/segmentator.state'
 import { Point } from './Point'
 export abstract class Tool {
   abstract icon: string
-  update (canvas: SVGElement, image: ImageData) {
+  update(canvas: SVGElement, image: ImageData) {
     canvas.innerHTML = ''
     for (let i = 0; i < image.shapes.length; i++) {
       if (image.shapes[i].shapeType === 'poly') {

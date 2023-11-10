@@ -7,7 +7,7 @@ import { IconsService } from './shared/services/icons.service'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor (private readonly iconsService: IconsService) {
+  constructor(private readonly iconsService: IconsService) {
     this.iconsService.addIcons()
   }
 }

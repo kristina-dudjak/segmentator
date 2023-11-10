@@ -28,18 +28,18 @@ export class ToolbarComponent {
     new DeleteTool()
   ]
 
-  constructor (private store: Store<SegmentatorState>) {}
+  constructor(private store: Store<SegmentatorState>) {}
 
-  change (tool: Tool) {
+  change(tool: Tool) {
     this.store.dispatch(toggleTool({ tool }))
   }
 
-  undo () {
+  undo() {
     const image = this.images.find(image => image.url === this.image.url)
     this.store.dispatch(
       removeShape({ image: image, index: image.shapes.length - 1 })
     )
   }
 
-  redo () {}
+  redo() {}
 }

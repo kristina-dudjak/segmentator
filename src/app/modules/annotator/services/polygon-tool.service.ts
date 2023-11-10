@@ -13,7 +13,7 @@ import { ImageData } from '../models/ImageData'
 export class PolygonTool extends Tool {
   icon: string = 'polygon'
 
-  override onMouseDown (
+  override onMouseDown(
     event: MouseEvent,
     canvas: SVGElement,
     image: ImageData,
@@ -56,7 +56,7 @@ export class PolygonTool extends Tool {
     }
   }
 
-  override onMouseMove (event: MouseEvent, canvas: SVGElement, points: Point[]) {
+  override onMouseMove(event: MouseEvent, canvas: SVGElement, points: Point[]) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = rect.width / canvas.clientWidth
     const scaleY = rect.height / canvas.clientHeight

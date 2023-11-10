@@ -13,14 +13,14 @@ import { AuthState } from 'src/app/modules/auth/store/auth.state'
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  constructor (private store: Store<AuthState>) {}
+  constructor(private store: Store<AuthState>) {}
   user$ = this.store.select(getUser)
 
-  ngOnInit () {
+  ngOnInit() {
     this.store.dispatch(getUserRequest())
   }
 
-  logout () {
+  logout() {
     this.store.dispatch(signOutRequest())
   }
 }
