@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs'
+import { catchError, map, mergeMap, of } from 'rxjs'
 import { AuthService } from 'src/app/modules/auth/services/auth.service'
 import {
   getUserFailure,
@@ -32,7 +32,6 @@ export class AuthEffects {
 
   private handleSuccess<
     T extends
-      | typeof getUserSuccess
       | typeof registerSuccess
       | typeof googleLoginSuccess
       | typeof loginSuccess
@@ -55,14 +54,12 @@ export class AuthEffects {
   getUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getUserRequest),
-      switchMap(() =>
-        this.authService
-          .getUser()
-          .pipe(
-            map(user =>
-              user ? this.handleSuccess(user, getUserSuccess) : getUserFailure()
-            )
-          )
+      mergeMap(() =>
+        this.authService.getUser().pipe(
+          map(user => ({ uid: user.uid, email: user.email })),
+          map(userModel => getUserSuccess({ user: userModel })),
+          catchError(() => of(getUserFailure()))
+        )
       )
     )
   )

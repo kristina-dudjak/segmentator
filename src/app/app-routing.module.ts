@@ -5,6 +5,7 @@ import {
   redirectLoggedInTo,
   canActivate
 } from '@angular/fire/compat/auth-guard'
+import { Page404Component } from './shared/views/page404/page404.component'
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login'])
 const redirectLoggedInToHome = () => redirectLoggedInTo(['annotator'])
@@ -28,6 +29,11 @@ const routes: Routes = [
         m => m.AnnotatorModule
       ),
     ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: Page404Component
   }
 ]
 

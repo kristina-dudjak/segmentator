@@ -7,11 +7,17 @@ import { MatDividerModule } from '@angular/material/divider'
 import { MatInputModule } from '@angular/material/input'
 import { MatIconModule } from '@angular/material/icon'
 import { MatCardModule } from '@angular/material/card'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { HeaderComponent } from './components/header/header.component'
+import { MatMenuModule } from '@angular/material/menu'
+import { MatPaginatorModule } from '@angular/material/paginator'
+import { Page404Component } from './views/page404/page404.component'
+import { RouterModule } from '@angular/router'
 
 @NgModule({
-  declarations: [HeaderComponent],
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  declarations: [HeaderComponent, Page404Component],
+  imports: [CommonModule, MatIconModule, MatButtonModule, RouterModule],
   exports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -19,7 +25,11 @@ import { HeaderComponent } from './components/header/header.component'
     MatDividerModule,
     MatInputModule,
     MatIconModule,
+    MatMenuModule,
     MatCardModule,
+    MatProgressBarModule,
+    MatSidenavModule,
+    MatPaginatorModule,
     HeaderComponent
   ]
 })
