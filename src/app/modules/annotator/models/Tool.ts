@@ -7,59 +7,46 @@ export abstract class Tool {
   abstract icon: string
   update(canvas: SVGElement, image: ImageData) {
     canvas.innerHTML = ''
-    for (let i = 0; i < image.shapes.length; i++) {
-      if (image.shapes[i].shapeType === 'poly') {
-        d3.select(canvas)
-          .append('polygon')
-          .attr(
-            'points',
-            image.shapes[i].points
-              .map(point => `${point.x},${point.y}`)
-              .join(' ')
-          )
-          .attr('fill', 'rgba(0, 0, 0, 0.5)')
-          .attr('class', `shape${i}`)
-          .attr('stroke', 'rgba(0, 0, 0, 0.5)')
-          .attr('stroke-width', '3')
-      } else if (image.shapes[i].shapeType === 'line') {
-        d3.select(canvas)
-          .append('polyline')
-          .attr(
-            'points',
-            image.shapes[i].points
-              .map(point => `${point.x},${point.y}`)
-              .join(' ')
-          )
-          .attr('fill', 'rgba(0, 0, 0, 0.5)')
-          .attr('class', `shape${i}`)
-          .attr('stroke', 'rgba(0, 0, 0, 0.5)')
-          .attr('stroke-width', '3')
-      } else if (image.shapes[i].shapeType === 'rect') {
-        let startX = image.shapes[i].points[0].x
-        let startY = image.shapes[i].points[0].y
-        let endX = image.shapes[i].points[1].x
-        let endY = image.shapes[i].points[1].y
+    image.shapes.forEach((shape, i) => {
+      const pointsString = shape.points
+        .map(point => `${point.x},${point.y}`)
+        .join(' ')
 
-        if (startX > endX) {
-          ;[startX, endX] = [endX, startX]
-        }
-        if (startY > endY) {
-          ;[startY, endY] = [endY, startY]
-        }
+      switch (shape.shapeType) {
+        case 'poly':
+        case 'line':
+          d3.select(canvas)
+            .append(shape.shapeType === 'poly' ? 'polygon' : 'polyline')
+            .attr('points', pointsString)
+            .attr('fill', 'rgba(0, 0, 0, 0.5)')
+            .attr('class', `shape${i}`)
+            .attr('stroke', 'rgba(0, 0, 0, 0.5)')
+            .attr('stroke-width', '3')
+          break
 
-        const width = endX - startX
-        const height = endY - startY
-        d3.select(canvas)
-          .append('rect')
-          .attr('x', startX)
-          .attr('y', startY)
-          .attr('width', width)
-          .attr('height', height)
-          .attr('fill', 'rgba(0, 0, 0, 0.5)')
-          .attr('class', `shape${i}`)
+        case 'rect':
+          const { x: startX, y: startY } = shape.points[0]
+          const { x: endX, y: endY } = shape.points[1]
+          const [x, y, width, height] = [
+            startX,
+            startY,
+            endX - startX,
+            endY - startY
+          ]
+
+          d3.select(canvas)
+            .append('rect')
+            .attr('x', x)
+            .attr('y', y)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('fill', 'rgba(0, 0, 0, 0.5)')
+            .attr('class', `shape${i}`)
+          break
       }
-    }
+    })
   }
+
   onMouseDown?(
     event: MouseEvent,
     canvas: SVGElement,

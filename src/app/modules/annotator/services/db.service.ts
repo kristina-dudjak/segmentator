@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { defaultIfEmpty, forkJoin, from, map } from 'rxjs'
+import { Observable, defaultIfEmpty, forkJoin, from, map } from 'rxjs'
 import { User } from '../../auth/models/User'
 import { ImageData } from '../models/ImageData'
 
@@ -10,56 +10,59 @@ import { ImageData } from '../models/ImageData'
 export class DbService {
   constructor(private db: AngularFirestore) {}
 
-  getImages() {
+  getImages(): Observable<ImageData[]> {
     return this.db
       .collection('images')
-      .snapshotChanges()
+      .valueChanges({ idField: 'id' })
       .pipe(
-        map(actions =>
-          actions.map(({ payload: { doc } }) => {
-            const img: ImageData = {
-              id: doc.id,
-              url: doc.data()['url'],
-              shapes: []
-            }
-            return img
-          })
+        map(images =>
+          images.map(image => ({
+            id: image.id,
+            url: image['url'],
+            shapes: []
+          }))
         )
       )
   }
 
-  getUserImages(user: User) {
+  getUserImages(user: User): Observable<ImageData[]> {
     return this.db
       .collection('users')
       .doc(user.uid)
       .collection('images')
-      .snapshotChanges()
+      .valueChanges({ idField: 'id' })
       .pipe(
-        map(actions =>
-          actions.map(({ payload: { doc } }) => ({
-            id: doc.id,
-            url: doc.data()['originalImageURL'],
-            shapes: doc.data()['shapes']
+        map(images =>
+          images.map(image => ({
+            id: image.id,
+            url: image['originalImageURL'],
+            shapes: image['shapes']
           }))
         ),
         defaultIfEmpty([])
       )
   }
 
-  removeImage(imageUrl: string) {
-    this.db.collection('images').doc(imageUrl).delete()
+  removeImage(imageUrl: string): Observable<void> {
+    return from(this.db.collection('images').doc(imageUrl).delete())
   }
 
-  removeUserImage(user: User, image: ImageData) {
-    this.db
-      .collection('users')
-      .doc(user.uid)
-      .collection('images')
-      .doc(image.id)
-      .delete()
+  removeUserImage(user: User, image: ImageData): Observable<void> {
+    return from(
+      this.db
+        .collection('users')
+        .doc(user.uid)
+        .collection('images')
+        .doc(image.id)
+        .delete()
+    )
   }
 
-  saveImage(user: User, originalImage: ImageData, markedImage: string) {
+  saveImage(
+    user: User,
+    originalImage: ImageData,
+    markedImage: string
+  ): Observable<void> {
     const imageRef = this.db
       .collection('users')
       .doc(user.uid)
@@ -75,7 +78,7 @@ export class DbService {
     )
   }
 
-  uploadImages(images: string[]) {
+  uploadImages(images: string[]): Observable<void> {
     return forkJoin(
       images.map(image =>
         from(
@@ -85,6 +88,6 @@ export class DbService {
             .set({ url: image }, { merge: true })
         )
       )
-    )
+    ).pipe(map(() => void 0))
   }
 }
